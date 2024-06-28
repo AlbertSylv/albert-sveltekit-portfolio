@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Use the Node.js version that matches your project
+          node-version: '20'  # Use the latest Node.js version
 
       - name: Install dependencies
         run: npm install
@@ -28,4 +28,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
           publish_dir: ./build  # Change this if your build output is in a different directory
