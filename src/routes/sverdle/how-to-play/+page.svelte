@@ -1,3 +1,7 @@
+<script>
+	import { base } from '$app/paths';
+</script>
+
 <svelte:head>
 	<title>How to play Sverdle</title>
 	<meta name="description" content="How to play Sverdle" />
