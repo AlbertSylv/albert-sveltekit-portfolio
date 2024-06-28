@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4  # Ensure using the latest version compatible with Node.js 20
+        uses: actions/checkout@v4
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v4  # Ensure using the latest version compatible with Node.js 20
+        uses: actions/setup-node@v4
         with:
           node-version: '20'  # Use the latest Node.js version
 
@@ -24,8 +24,18 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Debugging - List files in build directory
+        run: ls -la ./build
+
+      - name: Debugging - Check git version and configuration
+        run: |
+          git --version
+          git config --list
+          git remote -v
+          git status
+
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4  # Ensure using the latest version compatible with Node.js 20
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
