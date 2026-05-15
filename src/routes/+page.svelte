@@ -1,12 +1,5 @@
-<script lang="ts">
-	import { base } from '$app/paths';
-</script>
-
+<!-- Redirect handled in +page.ts; this satisfies the route -->
 <svelte:head>
 	<title>Albert Sylvester</title>
-	<meta name="description" content="Personal site" />
 </svelte:head>
-
-<h1>Albert Sylvester</h1>
-<p>Portfolio site — work in progress.</p>
-<p><a href={`${base}/about`}>About</a></p>
+<p>If you see this during dev, reload — you should redirect to Danish.</p>

@@ -1,0 +1,11 @@
+<!-- Replace this file with a real photo export (webp ~1200px wide). Aspect ~4:3 or 16:10. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" fill="none" aria-hidden="true">
+	<rect width="960" height="640" fill="#ecece8" />
+	<rect x="48" y="48" width="864" height="544" stroke="#c9c9c5" stroke-width="1.5" fill="none" />
+	<text x="480" y="318" fill="#757570" font-family="system-ui, Segoe UI, sans-serif" font-size="22" font-weight="500" text-anchor="middle">
+		portrait.webp
+	</text>
+	<text x="480" y="352" fill="#9a9994" font-family="system-ui, Segoe UI, sans-serif" font-size="13" text-anchor="middle">
+		hero  drop file in static/images/home/
+	</text>
+</svg>
