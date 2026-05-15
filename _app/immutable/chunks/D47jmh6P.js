@@ -1,0 +1,1 @@
+var e=[`da`,`en`];export{e as t};
