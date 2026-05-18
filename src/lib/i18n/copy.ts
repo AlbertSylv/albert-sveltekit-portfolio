@@ -59,7 +59,7 @@ export type Copy = {
 	};
 	contribution: {
 		title: string;
-		bullets: string[];
+		bullets: { heading: string; body: string }[];
 	};
 	work: {
 		title: string;
@@ -102,10 +102,22 @@ export const copy: Record<Locale, Copy> = {
 		contribution: {
 			title: 'What I do',
 			bullets: [
-				'For the past few years my main job has been full-time front-end development. React in production, with features and fixes that actually go live.',
-				'I use AI deliberately in my own workflow where it pays off. That gives me more time for the harder, end-to-end problems.',
-				'I can follow a piece of work the whole way: from a rough idea, through small tests, to a release that reaches real users.',
-				'I talk to users regularly, and what they actually struggle with is what shapes my priorities.'
+				{
+					heading: 'Front-end that ships',
+					body: 'For the past few years my main job has been full-time front-end development. React in production, with features and fixes that actually go live.'
+				},
+				{
+					heading: 'AI where it pays off',
+					body: 'I use AI deliberately in my own workflow where it pays off. That gives me more time for the harder, end-to-end problems.'
+				},
+				{
+					heading: 'Idea to release',
+					body: 'I can follow a piece of work the whole way: from a rough idea, through small tests, to a release that reaches real users.'
+				},
+				{
+					heading: 'Close to users',
+					body: 'I talk to users regularly, and what they actually struggle with is what shapes my priorities.'
+				}
 			]
 		},
 		work: {
@@ -256,10 +268,22 @@ export const copy: Record<Locale, Copy> = {
 		contribution: {
 			title: 'Det jeg kan',
 			bullets: [
-				'De sidste par år har min hovedopgave været fuldtids front-end-udvikling. React i praksis, med features og fixes der lander i produktion.',
-				'Jeg bruger AI bevidst i mit eget arbejde der hvor det betaler sig. Det giver mere tid til det egentlige problem og mindre tid på gentagne, lavpraktiske ting.',
-				'Jeg kan følge en opgave hele vejen: fra en løs idé, over små tests, ud til en release der faktisk når brugerne.',
-				'Jeg har jævnlig kontakt med brugere, og det de slås med er det der bestemmer hvordan arbejdet skal prioriteres.'
+				{
+					heading: 'Front-end der lander',
+					body: 'De sidste par år har min hovedopgave været fuldtids front-end-udvikling. React i praksis, med features og fixes der lander i produktion.'
+				},
+				{
+					heading: 'AI hvor det betaler sig',
+					body: 'Jeg bruger AI bevidst i mit eget arbejde der hvor det betaler sig. Det giver mere tid til det egentlige problem og mindre tid på gentagne, lavpraktiske ting.'
+				},
+				{
+					heading: 'Idé til release',
+					body: 'Jeg kan følge en opgave hele vejen: fra en løs idé, over små tests, ud til en release der faktisk når brugerne.'
+				},
+				{
+					heading: 'Tæt på brugerne',
+					body: 'Jeg har jævnlig kontakt med brugere, og det de slås med er det der bestemmer hvordan arbejdet skal prioriteres.'
+				}
 			]
 		},
 		work: {

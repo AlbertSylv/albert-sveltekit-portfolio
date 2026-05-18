@@ -56,8 +56,11 @@
 <section class="panel contribution animate-in stagger-1" aria-labelledby="contrib-h">
 	<h2 id="contrib-h">{tr.contribution.title}</h2>
 	<ul class="contrib-list">
-		{#each tr.contribution.bullets as line}
-			<li>{line}</li>
+		{#each tr.contribution.bullets as item}
+			<li>
+				<h3 class="contrib-heading">{item.heading}</h3>
+				<p class="contrib-body">{item.body}</p>
+			</li>
 		{/each}
 	</ul>
 </section>
@@ -96,6 +99,18 @@
 						{card.note}
 					{/if}
 				</p>
+				<span class="card-cta" aria-hidden="true">
+					{locale === 'da' ? 'Læs case' : 'Read case'}
+					<svg class="card-cta-arrow" width="14" height="14" viewBox="0 0 14 14" fill="none">
+						<path
+							d="M3 7h8m-3-3 3 3-3 3"
+							stroke="currentColor"
+							stroke-width="1.4"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+				</span>
 			</a>
 		{/each}
 	</div>
@@ -147,7 +162,7 @@
 	}
 	@media (min-width: 48rem) {
 		.hero-grid {
-			grid-template-columns: minmax(0, 1.05fr) minmax(12.5rem, 0.78fr);
+			grid-template-columns: minmax(0, 1fr) minmax(14rem, 0.92fr);
 			align-items: center;
 		}
 	}
@@ -175,22 +190,24 @@
 
 	.hero-figure {
 		margin: 0 auto;
-		border: 1px solid var(--border-strong);
+		padding: 0.6rem;
+		border: 1px solid var(--border);
 		background: var(--elevated);
-		overflow: hidden;
-		max-width: 22rem;
+		max-width: 24rem;
+		box-sizing: border-box;
 	}
 	@media (min-width: 48rem) {
 		.hero-figure {
 			margin-inline: 0;
 			justify-self: end;
-			max-width: min(100%, 21rem);
+			max-width: min(100%, 25rem);
 		}
 	}
 	.hero-img {
 		display: block;
 		width: 100%;
 		height: auto;
+		border: 1px solid var(--border);
 	}
 
 	.btn {
@@ -233,18 +250,38 @@
 		margin-bottom: 2rem;
 	}
 	.contribution h2 {
-		margin-bottom: 0.85rem;
+		margin-bottom: 1.1rem;
 	}
 	.contrib-list {
 		margin: 0;
-		padding-left: 1.1rem;
+		padding: 0;
+		list-style: none;
 		display: grid;
-		gap: 0.55rem;
-		max-width: 44rem;
+		gap: 1.1rem;
+		max-width: 48rem;
+	}
+	@media (min-width: 40rem) {
+		.contrib-list {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 1.25rem 2rem;
+		}
 	}
 	.contrib-list li {
-		line-height: 1.5;
-		color: color-mix(in srgb, var(--ink) 86%, var(--muted));
+		margin: 0;
+	}
+	.contrib-heading {
+		margin: 0 0 0.3rem;
+		font-size: 0.98rem;
+		font-weight: 600;
+		color: var(--ink);
+		line-height: 1.3;
+		letter-spacing: -0.005em;
+	}
+	.contrib-body {
+		margin: 0;
+		font-size: 0.92rem;
+		line-height: 1.55;
+		color: color-mix(in srgb, var(--ink) 80%, var(--muted));
 	}
 
 	.work {
@@ -276,7 +313,10 @@
 		background: var(--surface);
 		border-radius: 0;
 		border: 1px solid var(--border);
-		transition: border-color 0.15s ease;
+		transition:
+			border-color 0.15s ease,
+			transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+			box-shadow 0.18s ease;
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
@@ -284,7 +324,14 @@
 		color: inherit;
 	}
 	.card:hover {
-		border-color: var(--border-strong);
+		transform: translateY(-2px);
+		box-shadow: 0 8px 20px rgb(0 0 0 / 0.06);
+	}
+	.card:hover .card-cta {
+		color: var(--ink);
+	}
+	.card:hover .card-cta-arrow {
+		transform: translateX(2px);
 	}
 	.card-thumb-wrap {
 		flex-shrink: 0;
@@ -335,6 +382,21 @@
 		flex: 1;
 		line-height: 1.45;
 		color: color-mix(in srgb, var(--muted) 40%, var(--ink));
+	}
+	.card-cta {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.32rem;
+		margin: 0.9rem 1rem 0;
+		font-size: 0.82rem;
+		font-weight: 600;
+		letter-spacing: 0.01em;
+		color: var(--muted);
+		transition: color 0.15s ease;
+	}
+	.card-cta-arrow {
+		display: block;
+		transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
 	}
 	.contact-lead {
 		margin-bottom: 0.75rem;

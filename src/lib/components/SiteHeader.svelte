@@ -58,7 +58,10 @@
 
 <header class="masthead">
 	<div class="masthead-inner">
-		<a class="wordmark" href={localizedHref(locale, '')}>Albert Sylvester</a>
+		<a class="wordmark" href={localizedHref(locale, '')}>
+			<span class="wordmark-dot" aria-hidden="true"></span>
+			<span class="wordmark-text">Albert Sylvester</span>
+		</a>
 
 		<nav class="nav" aria-label="Primary">
 			<div class="nav-links">
@@ -168,6 +171,9 @@
 		overflow: visible;
 	}
 	.wordmark {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
 		font-family: var(--font-display);
 		font-weight: 700;
 		font-size: 1.1rem;
@@ -176,7 +182,15 @@
 		letter-spacing: -0.03em;
 		line-height: 1.2;
 	}
-	.wordmark:hover {
+	.wordmark-dot {
+		display: inline-block;
+		width: 0.55rem;
+		height: 0.55rem;
+		border-radius: 50%;
+		background: var(--ink);
+		flex-shrink: 0;
+	}
+	.wordmark:hover .wordmark-text {
 		text-decoration: underline;
 		text-underline-offset: 0.22em;
 		text-decoration-thickness: 1px;
