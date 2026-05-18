@@ -14,6 +14,8 @@
 	const MAIL = 'mailto:albertsylvester@outlook.dk';
 	const LI = 'https://www.linkedin.com/in/albert-sylvester-l/';
 	const ogImg = $derived(`${SITE_ORIGIN}${base}/${tr.hero.portraitSrc}`);
+
+	const NOTE_LINK_PLACEHOLDER = '{{linkText}}';
 </script>
 
 <svelte:head>
@@ -63,7 +65,6 @@
 <section id="work" class="work animate-in stagger-2" aria-labelledby="work-h">
 	<div class="work-head">
 		<h2 id="work-h">{tr.work.title}</h2>
-		<p class="work-sub">{tr.work.subtitle}</p>
 	</div>
 	<div class="card-grid">
 		{#each tr.work.cards as card}
@@ -87,7 +88,14 @@
 				</div>
 				<h3>{card.title}</h3>
 				<p class="card-context">{card.context}</p>
-				<p class="card-note">{card.note}</p>
+				<p class="card-note">
+					{#if card.noteLink}
+						{@const [before, after = ''] = card.note.split(NOTE_LINK_PLACEHOLDER)}
+						{before}{card.noteLink.text}{after}
+					{:else}
+						{card.note}
+					{/if}
+				</p>
 			</a>
 		{/each}
 	</div>
@@ -247,11 +255,7 @@
 	}
 	.work-head h2 {
 		color: var(--ink);
-	}
-	.work-sub {
-		max-width: 34rem;
 		margin-bottom: 0;
-		color: color-mix(in srgb, var(--muted) 55%, var(--ink));
 	}
 	.card-grid {
 		display: grid;

@@ -12,7 +12,16 @@
 	const tr = $derived(t(locale));
 
 	const metaTitle = $derived(`${card.title} · Albert Sylvester`);
-	const metaDesc = $derived(card.context);
+	const metaDesc = $derived(
+		card.noteLink ? card.note.replace('{{linkText}}', card.noteLink.text) : card.note
+	);
+
+	const NOTE_LINK_PLACEHOLDER = '{{linkText}}';
+	const noteParts = $derived.by(() => {
+		if (!card.noteLink) return null;
+		const [before, after = ''] = card.note.split(NOTE_LINK_PLACEHOLDER);
+		return { before, after };
+	});
 </script>
 
 <svelte:head>
@@ -46,7 +55,73 @@
 	</header>
 
 	<div class="xp-body">
-		<p class="xp-note">{card.note}</p>
+		{#if noteParts && card.noteLink}
+			{@const noteHref = localizedHref(locale, `/experience/${card.noteLink.slug}`)}
+			<p class="xp-note">{noteParts.before}<a class="xp-note-link" href={noteHref}
+					>{card.noteLink.text}</a
+				>{noteParts.after}</p>
+		{:else}
+			<p class="xp-note">{card.note}</p>
+		{/if}
+		{#if card.detail?.length}
+			{#each card.detail as block}
+				{#if block.heading}
+					<h2 class="xp-detail-heading">{block.heading}</h2>
+				{/if}
+				<p class="xp-detail">{block.body}</p>
+			{/each}
+		{/if}
+
+		{#if card.figures?.length}
+			<section class="xp-gallery" aria-labelledby="xp-gallery-h">
+				<h2 id="xp-gallery-h" class="xp-gallery-heading">
+					{card.figuresHeading ?? tr.experience.figuresHeading}
+				</h2>
+				<div class="xp-gallery-grid">
+					{#each card.figures as fig}
+						<figure class="xp-figure">
+							<div class="xp-figure-frame">
+								<img
+									class="xp-figure-img"
+									src={`${base}/${fig.src}`}
+									alt={fig.alt}
+									loading="lazy"
+									decoding="async"
+								/>
+							</div>
+							{#if fig.caption}
+								<figcaption class="xp-figcaption">{fig.caption}</figcaption>
+							{/if}
+						</figure>
+					{/each}
+				</div>
+			</section>
+		{/if}
+
+		{#if card.clients?.length}
+			<section class="xp-clients" aria-labelledby="xp-clients-h">
+				<h2 id="xp-clients-h" class="xp-gallery-heading">{tr.experience.clients}</h2>
+				<ul class="xp-clients-grid">
+					{#each card.clients as client}
+						<li class="xp-client">
+							<div class="xp-client-logo-wrap">
+								<img
+									class="xp-client-logo"
+									src={`${base}/${client.logoSrc}`}
+									alt={client.logoAlt}
+									loading="lazy"
+									decoding="async"
+								/>
+							</div>
+							<p class="xp-client-name">{client.name}</p>
+							{#if client.note}
+								<p class="xp-client-note">{client.note}</p>
+							{/if}
+						</li>
+					{/each}
+				</ul>
+			</section>
+		{/if}
 	</div>
 </article>
 
@@ -136,11 +211,131 @@
 	}
 
 	.xp-body {
-		max-width: var(--measure);
+		max-width: min(84ch, 100%);
 	}
 	.xp-note {
 		margin: 0;
 		line-height: 1.55;
 		color: color-mix(in srgb, var(--muted) 40%, var(--ink));
+	}
+	.xp-detail {
+		margin: 1rem 0 0;
+		line-height: 1.55;
+		color: color-mix(in srgb, var(--muted) 40%, var(--ink));
+	}
+	.xp-detail-heading {
+		margin: 1.6rem 0 0.35rem;
+		font-size: 1.05rem;
+		font-weight: 600;
+		color: var(--ink);
+		line-height: 1.3;
+		letter-spacing: -0.01em;
+	}
+	.xp-detail-heading + .xp-detail {
+		margin-top: 0;
+	}
+
+	.xp-gallery {
+		margin-top: 2rem;
+		padding-top: 1.75rem;
+		border-top: 1px solid var(--border);
+	}
+	.xp-gallery-heading {
+		margin: 0 0 1rem;
+		font-size: 0.85rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: color-mix(in srgb, var(--muted) 50%, var(--ink));
+	}
+	.xp-gallery-grid {
+		display: grid;
+		gap: 1.35rem;
+	}
+	@media (min-width: 48rem) {
+		.xp-gallery-grid {
+			gap: 1.5rem;
+		}
+	}
+	.xp-figure {
+		margin: 0;
+	}
+	.xp-figure-frame {
+		background: var(--elevated);
+		border: 1px solid var(--border);
+		border-radius: 6px;
+		padding: 0.5rem;
+		box-sizing: border-box;
+	}
+	.xp-figure-img {
+		display: block;
+		width: 100%;
+		height: auto;
+		border-radius: 4px;
+		border: 1px solid var(--border);
+	}
+	.xp-figcaption {
+		margin-top: 0.5rem;
+		font-size: 0.88rem;
+		line-height: 1.45;
+		color: color-mix(in srgb, var(--muted) 45%, var(--ink));
+	}
+
+	.xp-clients {
+		margin-top: 2rem;
+		padding-top: 1.75rem;
+		border-top: 1px solid var(--border);
+	}
+	.xp-clients-grid {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 1.25rem;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+	@media (min-width: 38rem) {
+		.xp-clients-grid {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			gap: 1.1rem;
+		}
+	}
+	.xp-client {
+		display: flex;
+		flex-direction: column;
+		gap: 0.55rem;
+		margin: 0;
+	}
+	.xp-client-logo-wrap {
+		aspect-ratio: 1;
+		width: 100%;
+		box-sizing: border-box;
+		background: var(--surface);
+		border: 1px solid var(--border);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1rem;
+	}
+	.xp-client-logo {
+		display: block;
+		max-width: 100%;
+		max-height: 80%;
+		width: auto;
+		height: auto;
+		object-fit: contain;
+	}
+	.xp-client-name {
+		margin: 0;
+		font-size: 0.9rem;
+		font-weight: 600;
+		color: var(--ink);
+		line-height: 1.3;
+	}
+	.xp-client-note {
+		margin: 0;
+		font-size: 0.85rem;
+		line-height: 1.45;
+		color: color-mix(in srgb, var(--muted) 45%, var(--ink));
 	}
 </style>

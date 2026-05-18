@@ -2,4 +2,4 @@
 <svelte:head>
 	<title>Albert Sylvester</title>
 </svelte:head>
-<p>If you see this during dev, reload — you should redirect to Danish.</p>
+<p>If you see this during dev, reload. You should redirect to Danish.</p>
