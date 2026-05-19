@@ -293,7 +293,7 @@ export const copy: Record<Locale, Copy> = {
 			kicker: 'København',
 			headline: 'Forbinder bruger, produkt og kode.',
 			lead:
-				'Koncept- og front-end-udvikler der arbejder med brugerundersøgelser, produkt og kode.',
+				'Koncept- og front-end-udvikler.',
 			portraitSrc: 'images/home/portrait.png',
 			portraitAlt: 'Albert Sylvester.',
 			ctaWork: 'Se hvad jeg har lavet',
