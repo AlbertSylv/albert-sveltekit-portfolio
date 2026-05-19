@@ -100,23 +100,19 @@ export const copy: Record<Locale, Copy> = {
 			ctaContact: 'Get in touch'
 		},
 		contribution: {
-			title: 'What I do',
+			title: 'How I work',
 			bullets: [
 				{
-					heading: 'Front-end that ships',
-					body: 'For the past few years my main job has been full-time front-end development. React in production, with features and fixes that actually go live.'
-				},
-				{
-					heading: 'AI where it pays off',
-					body: 'I use AI deliberately in my own workflow where it pays off. That gives me more time for the harder, end-to-end problems.'
+					heading: 'Close to users',
+					body: 'I talk to users regularly. What they struggle with is what I build toward, not the other way around.'
 				},
 				{
 					heading: 'Idea to release',
-					body: 'I can follow a piece of work the whole way: from a rough idea, through small tests, to a release that reaches real users.'
+					body: 'I can take work from a rough idea through small tests to something real users use.'
 				},
 				{
-					heading: 'Close to users',
-					body: 'I talk to users regularly, and what they actually struggle with is what shapes my priorities.'
+					heading: 'Concept and front-end',
+					body: 'Most of my day is front-end in React, shaped by product and concept questions, not just tickets.'
 				}
 			]
 		},
@@ -127,8 +123,46 @@ export const copy: Record<Locale, Copy> = {
 					slug: 'bmf-systems',
 					menuLabel: 'BMF Systems',
 					title: 'BMF Systems',
-					context: 'ISO & quality tooling · SharePoint / M365',
-					note: "CPH Cloud's own product: a SharePoint-based quality management system for ISO-certified companies.",
+					context: 'Product developer · SharePoint / M365',
+					note: "Modular ISO management system in the customer's own SharePoint. I was the sole developer on the product for two years.",
+					detail: [
+						{
+							heading: 'What BMF is',
+							body: "BMF Systems is a complete ISO management system installed in the customer's own SharePoint. Data, users and permissions stay in their Microsoft 365 tenant rather than a separate hosted service. The product is modular, so each organisation only switches on the parts it needs for quality, environment or occupational health and safety work."
+						},
+						{
+							heading: 'What the product covers',
+							body: 'Incident reporting and handling, risk assessment, process documents with versioning and approval workflows, audit programmes and audit reports, custom checklists and forms, supplier evaluation, ISO clause references across the system, and an overview dashboard. Customers can also enable an Azure Function in their tenant that reads notification state from SharePoint and sends email when users need to act on something in BMF.'
+						},
+						{
+							heading: 'My role',
+							body: 'I worked as product developer and support. Customers brought problems and ideas for improvement; I fixed what I could on the spot and brought recurring themes into product meetings. Together with stakeholders I agreed what to prioritise for the next release, then implemented it. For the last two years I was the only developer on BMF and owned the features that shipped.'
+						}
+					],
+					figuresHeading: 'Product screens',
+					figures: [
+						{
+							src: 'images/experience/bmf-incidents-collage.png',
+							alt:
+								'Collage of BMF incident management: list view, incident detail form, dashboard with open incidents, and mobile incident report.',
+							caption:
+								'Incidents: register, follow up, and see status.'
+						},
+						{
+							src: 'images/experience/bmf-risk-collage.png',
+							alt:
+								'Collage of BMF risk assessment: risk matrix dashboard with averages and a detail table showing risk before and after control measures.',
+							caption:
+								'Risk: matrix overview and per-process assessment with before/after control.'
+						},
+						{
+							src: 'images/experience/bmf-suppliers.png',
+							alt:
+								'BMF Suppliers screen: categories, criteria scores per supplier, average rating, and traffic-light assessment.',
+							caption:
+								'Supplier evaluation: criteria grid and ratings by category.'
+						}
+					],
 					thumbSrc: 'images/home/work-bmf.png',
 					thumbAlt: 'BMF Systems logo.'
 				},
@@ -195,7 +229,7 @@ export const copy: Record<Locale, Copy> = {
 					menuLabel: 'FaunaPhotonics',
 					title: 'FaunaPhotonics · Bachelor',
 					context: "Digital concept development · insect data portal · 2023",
-					note: "Bachelor thesis with FaunaPhotonics while studying digital concept development. Interview-led exploration of customer needs around the insect data portal, sketches, and a desktop Figma prototype for the planned portal replacement, centred on comparative views across sensors and seasons.",
+					note: 'Bachelor thesis with FaunaPhotonics. User interviews and a Figma prototype for the insect data portal.',
 					detail: [
 						{
 							heading: 'Why it mattered',
@@ -257,7 +291,7 @@ export const copy: Record<Locale, Copy> = {
 		lang: { label: 'Sprog', da: 'Dansk', en: 'English' },
 		hero: {
 			kicker: 'København',
-			headline: 'Forbinder brugerundersøgelse, produkt og kode.',
+			headline: 'Forbinder bruger, produkt og kode.',
 			lead:
 				'Koncept- og front-end-udvikler der arbejder med brugerundersøgelser, produkt og kode.',
 			portraitSrc: 'images/home/portrait.png',
@@ -266,23 +300,19 @@ export const copy: Record<Locale, Copy> = {
 			ctaContact: 'Tag fat i mig'
 		},
 		contribution: {
-			title: 'Det jeg kan',
+			title: 'Sådan arbejder jeg',
 			bullets: [
 				{
-					heading: 'Front-end der lander',
-					body: 'De sidste par år har min hovedopgave været fuldtids front-end-udvikling. React i praksis, med features og fixes der lander i produktion.'
-				},
-				{
-					heading: 'AI hvor det betaler sig',
-					body: 'Jeg bruger AI bevidst i mit eget arbejde der hvor det betaler sig. Det giver mere tid til det egentlige problem og mindre tid på gentagne, lavpraktiske ting.'
+					heading: 'Tæt på brugerne',
+					body: 'Jeg har jævnlig kontakt med brugere. Det de slås med, bygger jeg ud fra, ikke omvendt.'
 				},
 				{
 					heading: 'Idé til release',
-					body: 'Jeg kan følge en opgave hele vejen: fra en løs idé, over små tests, ud til en release der faktisk når brugerne.'
+					body: 'Jeg kan tage en opgave fra en løs idé, over små tests, til noget rigtige brugere bruger.'
 				},
 				{
-					heading: 'Tæt på brugerne',
-					body: 'Jeg har jævnlig kontakt med brugere, og det de slås med er det der bestemmer hvordan arbejdet skal prioriteres.'
+					heading: 'Koncept og front-end',
+					body: 'Det meste af min dag er front-end i React, formet af produkt- og konceptspørgsmål, ikke bare tickets.'
 				}
 			]
 		},
@@ -293,8 +323,46 @@ export const copy: Record<Locale, Copy> = {
 					slug: 'bmf-systems',
 					menuLabel: 'BMF Systems',
 					title: 'BMF Systems',
-					context: 'ISO og kvalitetsledelse · SharePoint / M365',
-					note: 'CPH Clouds eget produkt: et kvalitetsledelsessystem på SharePoint til ISO-certificerede virksomheder.',
+					context: 'Produktudvikler · SharePoint / M365',
+					note: 'Modulært ISO-ledelsessystem i kundens eget SharePoint. Jeg var eneste udvikler på produktet i to år.',
+					detail: [
+						{
+							heading: 'Hvad BMF er',
+							body: 'BMF Systems er et komplet ISO-ledelsessystem, der installeres direkte i kundens eget SharePoint. Data, brugere og rettigheder bliver i deres Microsoft 365-tenant i stedet for en separat hosted løsning. Produktet er modulært, så hver organisation kun aktiverer de dele, de har brug for inden for kvalitet, miljø eller arbejdsmiljø.'
+						},
+						{
+							heading: 'Hvad produktet dækker',
+							body: 'Hændelsesindberetning og -håndtering, risikovurdering, procesdokumenter med versionering og godkendelsesflow, auditprogrammer og auditrapporter, tilpassede tjeklister og skemaer, leverandørevaluering, ISO-referencer på tværs af systemet, og et overbliks-dashboard. Kunder kan også aktivere en Azure Function i deres tenant, som læser notifikationsstatus fra SharePoint og sender mail, når brugere skal reagere på noget i BMF.'
+						},
+						{
+							heading: 'Min rolle',
+							body: 'Jeg arbejdede som produktudvikler og support. Kunder kom med problemer og forslag til forbedringer. Jeg løste det jeg kunne med det samme og bragte gentagne temaer med til produktmøder. Med stakeholders aftalte jeg hvad der skulle prioriteres til næste release, og implementerede det bagefter. De sidste to år var jeg eneste udvikler på BMF og stod for det der blev udgivet.'
+						}
+					],
+					figuresHeading: 'Produktbilleder',
+					figures: [
+						{
+							src: 'images/experience/bmf-incidents-collage.png',
+							alt:
+								'Collage af BMF hændelseshåndtering: liste, detaljeformular, dashboard med åbne hændelser og mobil hændelsesindberetning.',
+							caption:
+								'Hændelser: indberet, opfølg og se status.'
+						},
+						{
+							src: 'images/experience/bmf-risk-collage.png',
+							alt:
+								'Collage af BMF risikovurdering: risikomatrix-dashboard med gennemsnit og detaljetabel med risiko før og efter styring.',
+							caption:
+								'Risiko: matrix-overblik og vurdering pr. proces med før/efter styring.'
+						},
+						{
+							src: 'images/experience/bmf-suppliers.png',
+							alt:
+								'BMF-skærmbillede Leverandører: kategorier, kriterievurderinger, gennemsnit og trafiklys-vurdering pr. leverandør.',
+							caption:
+								'Leverandørevaluering: kriteriegitter og vurderinger pr. kategori.'
+						}
+					],
 					thumbSrc: 'images/home/work-bmf.png',
 					thumbAlt: 'BMF Systems-logo.'
 				},
@@ -361,7 +429,7 @@ export const copy: Record<Locale, Copy> = {
 					menuLabel: 'FaunaPhotonics',
 					title: 'FaunaPhotonics · Bachelor',
 					context: 'Digital konceptudvikling · insekt-dataportal · 2023',
-					note: 'Bacheloropgave som digital konceptudvikler med FaunaPhotonics. Kvalitative kundeinterviews om behov til insekt-dataportalen, skitsearbejde og en desktop-prototype i Figma til den kommende portal, med vægt på sammenligning på tværs af sensorer og sæsoner.',
+					note: 'Bacheloropgave med FaunaPhotonics. Kundeinterviews og Figma-prototype til insekt-dataportalen.',
 					detail: [
 						{
 							heading: 'Hvorfor det betød noget',

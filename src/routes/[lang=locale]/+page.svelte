@@ -54,15 +54,33 @@
 </section>
 
 <section class="panel contribution animate-in stagger-1" aria-labelledby="contrib-h">
-	<h2 id="contrib-h">{tr.contribution.title}</h2>
-	<ul class="contrib-list">
+	<h2 id="contrib-h" class="contrib-title">
+		<span>{tr.contribution.title}</span>
+		<svg class="contrib-diamond" viewBox="0 0 40 20" width="40" height="20" aria-hidden="true">
+			<path
+				d="M0 10 10 0 20 10 10 20Z"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.5"
+				stroke-linejoin="round"
+			/>
+			<path
+				d="M20 10 30 0 40 10 30 20Z"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="1.5"
+				stroke-linejoin="round"
+			/>
+		</svg>
+	</h2>
+	<ol class="contrib-steps">
 		{#each tr.contribution.bullets as item}
-			<li>
+			<li class="contrib-step">
 				<h3 class="contrib-heading">{item.heading}</h3>
 				<p class="contrib-body">{item.body}</p>
 			</li>
 		{/each}
-	</ul>
+	</ol>
 </section>
 
 <section id="work" class="work animate-in stagger-2" aria-labelledby="work-h">
@@ -74,6 +92,7 @@
 			<a
 				class="card"
 				href={localizedHref(locale, `/experience/${card.slug}`)}
+				data-slug={card.slug}
 				data-sveltekit-preload-data="hover"
 			>
 				<div class="card-thumb-wrap">
@@ -249,29 +268,34 @@
 		border: 1px solid var(--border);
 		margin-bottom: 2rem;
 	}
-	.contribution h2 {
-		margin-bottom: 1.1rem;
+	.contrib-title {
+		display: flex;
+		align-items: center;
+		gap: 0.7rem;
+		margin: 0 0 1.35rem;
+		color: var(--ink);
 	}
-	.contrib-list {
+	.contrib-diamond {
+		display: block;
+		flex-shrink: 0;
+		width: 2.35rem;
+		height: auto;
+		color: var(--ink);
+	}
+	.contrib-steps {
 		margin: 0;
 		padding: 0;
 		list-style: none;
 		display: grid;
-		gap: 1.1rem;
-		max-width: 48rem;
+		gap: 1.35rem;
 	}
-	@media (min-width: 40rem) {
-		.contrib-list {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-			gap: 1.25rem 2rem;
-		}
-	}
-	.contrib-list li {
+	.contrib-step {
 		margin: 0;
+		padding: 0;
 	}
 	.contrib-heading {
-		margin: 0 0 0.3rem;
-		font-size: 0.98rem;
+		margin: 0 0 0.4rem;
+		font-size: 1rem;
 		font-weight: 600;
 		color: var(--ink);
 		line-height: 1.3;
@@ -282,6 +306,17 @@
 		font-size: 0.92rem;
 		line-height: 1.55;
 		color: color-mix(in srgb, var(--ink) 80%, var(--muted));
+	}
+	@media (min-width: 48rem) {
+		.contrib-steps {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: 0 2rem;
+			align-items: start;
+		}
+		.contrib-step:not(:first-child) {
+			border-left: 1px solid var(--border-strong);
+			padding-left: 2rem;
+		}
 	}
 
 	.work {
@@ -338,7 +373,7 @@
 		aspect-ratio: 1;
 		width: 100%;
 		box-sizing: border-box;
-		padding: 0.65rem;
+		padding: 0.75rem;
 		background: var(--elevated);
 		border-bottom: 1px solid var(--border);
 		display: flex;
@@ -355,15 +390,26 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding: clamp(0.65rem, 2.8vw, 1rem);
+		padding: 1rem;
 	}
 	.card-thumb {
 		display: block;
 		width: auto;
 		height: auto;
-		max-width: 100%;
-		max-height: 100%;
 		object-fit: contain;
+	}
+	/* Optical balance: same padding, tuned scale per logo shape */
+	.card[data-slug='bmf-systems'] .card-thumb {
+		max-width: 60%;
+		max-height: 60%;
+	}
+	.card[data-slug='cph-cloud'] .card-thumb {
+		max-width: 70%;
+		max-height: 70%;
+	}
+	.card[data-slug='fauna-photonics'] .card-thumb {
+		max-width: 78%;
+		max-height: 56%;
 	}
 	.card h3 {
 		padding: 0.75rem 1rem 0.15rem;
@@ -387,7 +433,7 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 0.32rem;
-		margin: 0.9rem 1rem 0;
+		margin: auto 1rem 0;
 		font-size: 0.82rem;
 		font-weight: 600;
 		letter-spacing: 0.01em;

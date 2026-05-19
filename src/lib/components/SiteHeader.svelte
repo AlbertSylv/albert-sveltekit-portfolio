@@ -58,10 +58,12 @@
 
 <header class="masthead">
 	<div class="masthead-inner">
-		<a class="wordmark" href={localizedHref(locale, '')}>
-			<span class="wordmark-dot" aria-hidden="true"></span>
-			<span class="wordmark-text">Albert Sylvester</span>
-		</a>
+		<div class="masthead-top">
+			<a class="wordmark" href={localizedHref(locale, '')}>
+				<span class="wordmark-dot" aria-hidden="true"></span>
+				<span class="wordmark-text">Albert Sylvester</span>
+			</a>
+		</div>
 
 		<nav class="nav" aria-label="Primary">
 			<div class="nav-links">
@@ -169,6 +171,55 @@
 		justify-content: space-between;
 		gap: 1rem 1.75rem;
 		overflow: visible;
+	}
+	.masthead-top {
+		flex-shrink: 0;
+	}
+
+	@media (max-width: 47.99rem) {
+		.masthead-inner {
+			position: relative;
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0.65rem;
+		}
+		.masthead-top {
+			width: 100%;
+			padding-right: 4.75rem;
+		}
+		.wordmark-text {
+			white-space: nowrap;
+		}
+		.nav {
+			width: 100%;
+		}
+		.nav-links {
+			width: 100%;
+			--nav-item-gap: 0;
+			justify-content: space-between;
+			flex-wrap: nowrap;
+			font-size: 0.875rem;
+		}
+		.nav-links > .nav-link {
+			flex: 1 1 0;
+			min-width: 0;
+			display: block;
+			text-align: center;
+		}
+		.nav-links > .nav-exp {
+			flex: 1 1 0;
+			min-width: 0;
+			display: flex;
+			justify-content: center;
+		}
+		.nav-tail {
+			position: absolute;
+			top: calc(var(--space) * 0.85);
+			right: var(--space);
+		}
+		.nav-divider {
+			display: none;
+		}
 	}
 	.wordmark {
 		display: inline-flex;
