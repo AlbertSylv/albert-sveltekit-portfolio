@@ -1,4 +1,4 @@
-export type FingerPhase = 'waiting' | 'countdown' | 'spinning' | 'winner';
+export type FingerPhase = 'waiting' | 'countdown' | 'flash' | 'winner';
 
 export type Finger = {
 	id: number;
@@ -10,24 +10,14 @@ export type Finger = {
 export const SETTLE_MS = 400;
 export const COUNTDOWN_SECONDS = 3;
 export const MAX_FINGERS = 10;
+export const FLASH_MS = 480;
 
-export type SpinStep = {
-	highlightIndex: number;
-	delayMs: number;
-};
-
-/** Roulette highlight schedule with increasing pauses. */
-export function buildSpinSchedule(fingerCount: number, extraCycles = 2): SpinStep[] {
-	if (fingerCount < 1) return [];
-	const totalSteps = fingerCount * extraCycles + fingerCount;
-	const schedule: SpinStep[] = [];
-	for (let step = 0; step < totalSteps; step++) {
-		const highlightIndex = step % fingerCount;
-		const t = step / Math.max(1, totalSteps - 1);
-		const delayMs = Math.round(70 + t * t * 350);
-		schedule.push({ highlightIndex, delayMs });
-	}
-	return schedule;
+/** Pulse cycle length (seconds) — shorter = faster as countdown nears zero. */
+export function pulseDurationSec(countdown: number): number {
+	if (countdown >= 3) return 1.15;
+	if (countdown >= 2) return 0.7;
+	if (countdown >= 1) return 0.38;
+	return 0.38;
 }
 
 export function pickWinnerIndex(fingerCount: number): number {

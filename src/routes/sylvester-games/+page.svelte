@@ -31,9 +31,6 @@
 	const visibleGames = $derived(
 		gamesCatalog.filter((g) => !g.mobileOnly || mobilePlay)
 	);
-	const showMobileOnlyMessage = $derived(
-		browser && gamesCatalog.some((g) => g.mobileOnly) && !mobilePlay
-	);
 </script>
 
 <svelte:head>
@@ -49,12 +46,7 @@
 	</div>
 	<p class="hub-lead">{tr.hubLead}</p>
 
-	{#if showMobileOnlyMessage}
-		<section class="hub-panel hub-panel-message" aria-label={tr.hubTitle}>
-			<div class="hub-panel-rule" aria-hidden="true"></div>
-			<p class="hub-mobile-only">{tr.mobileOnlyHub}</p>
-		</section>
-	{:else if visibleGames.length > 0}
+	{#if visibleGames.length > 0}
 		<section class="hub-panel" aria-label={tr.hubTitle}>
 			<div class="hub-panel-rule" aria-hidden="true"></div>
 			<div class="hub-grid-head">
@@ -71,17 +63,6 @@
 						mobileBadgeLabel={tr.mobileBadge}
 					/>
 				{/each}
-			</div>
-		</section>
-	{:else}
-		<section class="hub-panel" aria-label={tr.hubTitle}>
-			<div class="hub-panel-rule" aria-hidden="true"></div>
-			<div class="hub-empty">
-				<div class="hub-empty-mark">
-					<span class="hub-dot hub-dot-lg" aria-hidden="true"></span>
-				</div>
-				<p class="hub-empty-title">{tr.empty}</p>
-				<p class="hub-empty-sub">{tr.emptySub}</p>
 			</div>
 		</section>
 	{/if}
@@ -119,10 +100,6 @@
 		background: var(--games-accent);
 		flex-shrink: 0;
 	}
-	.hub-dot-lg {
-		width: 14px;
-		height: 14px;
-	}
 	.hub-title {
 		margin: 0;
 		font-size: clamp(2rem, 5vw, 3rem);
@@ -148,46 +125,6 @@
 	.hub-panel-rule {
 		height: 3px;
 		background: var(--games-accent);
-	}
-	.hub-panel-message {
-		padding: clamp(1.5rem, 4vw, 2.25rem) var(--games-pad);
-	}
-	.hub-mobile-only {
-		margin: 0;
-		font-size: 0.9375rem;
-		line-height: 1.55;
-		color: var(--games-muted);
-		max-width: 42ch;
-	}
-	.hub-empty {
-		padding: clamp(3rem, 8vw, 5.5rem) var(--games-pad);
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-	}
-	.hub-empty-mark {
-		width: 46px;
-		height: 46px;
-		border: 1px solid var(--games-border-strong);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-bottom: 22px;
-	}
-	.hub-empty-title {
-		margin: 0;
-		font-size: 1.125rem;
-		font-weight: 600;
-		color: var(--games-ink);
-		letter-spacing: -0.01em;
-	}
-	.hub-empty-sub {
-		margin: 8px 0 0;
-		color: var(--games-muted);
-		font-size: 0.9375rem;
-		max-width: 40ch;
-		line-height: 1.55;
 	}
 	.hub-grid-head {
 		padding: 16px var(--games-pad) 0;

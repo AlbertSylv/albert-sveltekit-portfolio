@@ -16,7 +16,7 @@ export const gamesCatalog: GameEntry[] = [
 	{
 		id: 'finger-pick',
 		category: 'PARTY',
-		year: '2025',
+		year: '2026',
 		title: 'Finger Pick',
 		live: true,
 		mobileOnly: true,

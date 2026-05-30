@@ -7,7 +7,8 @@
 		SETTLE_MS,
 		COUNTDOWN_SECONDS,
 		MAX_FINGERS,
-		buildSpinSchedule,
+		FLASH_MS,
+		pulseDurationSec,
 		pickWinnerIndex,
 		type Finger,
 		type FingerPhase
@@ -22,16 +23,20 @@
 	let phase = $state<FingerPhase>('waiting');
 	let fingers = $state<Finger[]>([]);
 	let countdown = $state(0);
-	let highlightId = $state<number | null>(null);
 	let winnerId = $state<number | null>(null);
+	let flashColor = $state<string | null>(null);
 	let nextColorIndex = $state(0);
 	let reducedMotion = $state(false);
 
 	let settleTimer: ReturnType<typeof setTimeout> | undefined;
 	let countdownTimer: ReturnType<typeof setInterval> | undefined;
-	let spinTimer: ReturnType<typeof setTimeout> | undefined;
+	let flashTimer: ReturnType<typeof setTimeout> | undefined;
 
 	const fingerMap = $derived(new Map(fingers.map((f) => [f.id, f])));
+
+	const pulseDuration = $derived(
+		phase === 'countdown' && countdown > 0 ? `${pulseDurationSec(countdown)}s` : '2s'
+	);
 
 	$effect(() => {
 		if (typeof window === 'undefined') return;
@@ -41,8 +46,8 @@
 	function clearTimers() {
 		clearTimeout(settleTimer);
 		clearInterval(countdownTimer);
-		clearTimeout(spinTimer);
-		settleTimer = countdownTimer = spinTimer = undefined;
+		clearTimeout(flashTimer);
+		settleTimer = countdownTimer = flashTimer = undefined;
 	}
 
 	function resetGame() {
@@ -50,8 +55,8 @@
 		phase = 'waiting';
 		fingers = [];
 		countdown = 0;
-		highlightId = null;
 		winnerId = null;
+		flashColor = null;
 		nextColorIndex = 0;
 	}
 
@@ -72,7 +77,7 @@
 			resetGame();
 			return;
 		}
-		if (phase === 'spinning') return;
+		if (phase === 'flash') return;
 		e.preventDefault();
 		playEl?.setPointerCapture(e.pointerId);
 
@@ -113,10 +118,11 @@
 		map.delete(pointerId);
 		syncFingers(map);
 
-		if (phase === 'countdown') {
+		if (phase === 'countdown' || phase === 'flash') {
 			clearTimers();
 			phase = 'waiting';
 			countdown = 0;
+			flashColor = null;
 		} else if (phase === 'waiting') {
 			clearTimers();
 			if (map.size >= 2) scheduleSettle();
@@ -148,53 +154,38 @@
 			if (countdown <= 0) {
 				clearInterval(countdownTimer);
 				countdownTimer = undefined;
-				startSpin();
+				revealWinner();
 			}
 		}, 1000);
 	}
 
-	function startSpin() {
+	function revealWinner() {
 		const list = [...fingerMap.values()];
 		if (list.length < 2) {
 			phase = 'waiting';
 			return;
 		}
-		phase = 'spinning';
-		const winnerIndex = pickWinnerIndex(list.length);
-		const winnerPointerId = list[winnerIndex]!.id;
-		const schedule = buildSpinSchedule(list.length);
-
-		if (schedule.length > 0) {
-			const last = schedule[schedule.length - 1]!;
-			schedule[schedule.length - 1] = { highlightIndex: winnerIndex, delayMs: last.delayMs };
-		}
+		const winner = list[pickWinnerIndex(list.length)]!;
+		winnerId = winner.id;
+		flashColor = dotColor(winner.colorIndex);
 
 		if (reducedMotion) {
-			winnerId = winnerPointerId;
-			highlightId = winnerPointerId;
 			phase = 'winner';
+			flashColor = null;
 			return;
 		}
 
-		let step = 0;
-		const runStep = () => {
-			if (step < schedule.length) {
-				const { highlightIndex, delayMs } = schedule[step]!;
-				highlightId = list[highlightIndex]!.id;
-				step += 1;
-				spinTimer = setTimeout(runStep, delayMs);
-			} else {
-				winnerId = winnerPointerId;
-				highlightId = winnerPointerId;
-				phase = 'winner';
-			}
-		};
-		runStep();
+		phase = 'flash';
+		flashTimer = setTimeout(() => {
+			flashColor = null;
+			phase = 'winner';
+			flashTimer = undefined;
+		}, FLASH_MS);
 	}
 
 	function dotClass(id: number): string {
 		let c = 'dot';
-		if (phase === 'spinning' && highlightId === id) c += ' dot-highlight';
+		if (phase === 'waiting' || phase === 'countdown') c += ' dot-pulse';
 		if (phase === 'winner') {
 			if (winnerId === id) c += ' dot-winner';
 			else c += ' dot-faded';
@@ -212,16 +203,24 @@
 		bind:this={playEl}
 		role="application"
 		aria-label={tr.waiting}
+		style="--pulse-duration: {pulseDuration}"
 		onpointerdown={onPointerDown}
 		onpointermove={onPointerMove}
 		onpointerup={onPointerUp}
 		onpointercancel={onPointerCancel}
 		onlostpointercapture={(e) => removePointer(e.pointerId)}
 	>
+		{#if phase === 'flash' && flashColor}
+			<div
+				class="flash"
+				style="background-color: {flashColor}"
+				aria-hidden="true"
+			></div>
+		{/if}
+
 		{#each fingers as finger (finger.id)}
 			<span
 				class={dotClass(finger.id)}
-				class:dot-idle={phase === 'waiting' || phase === 'countdown'}
 				style="left: {finger.x}px; top: {finger.y}px; background-color: {dotColor(finger.colorIndex)}"
 			></span>
 		{/each}
@@ -288,32 +287,52 @@
 		overflow: hidden;
 	}
 
+	.flash {
+		position: absolute;
+		inset: 0;
+		z-index: 15;
+		pointer-events: none;
+		animation: screen-flash 480ms ease-out forwards;
+	}
+
+	@keyframes screen-flash {
+		0% {
+			opacity: 0;
+		}
+		18% {
+			opacity: 0.62;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
+
 	.dot {
 		position: absolute;
-		width: 60px;
-		height: 60px;
-		margin-left: -30px;
-		margin-top: -30px;
+		width: 80px;
+		height: 80px;
+		margin-left: -40px;
+		margin-top: -40px;
 		border-radius: 50%;
 		pointer-events: none;
-		box-shadow: 0 2px 8px rgb(74 36 16 / 0.2);
-		transition: transform 80ms ease, opacity 200ms ease;
+		box-shadow: 0 3px 12px rgb(74 36 16 / 0.22);
+		z-index: 5;
+		transition: opacity 220ms ease, transform 220ms ease;
 	}
-	.dot-idle {
-		animation: finger-pulse 2s ease-in-out infinite;
-	}
-	.dot-highlight {
-		transform: scale(1.2);
-		box-shadow: 0 0 0 3px var(--games-surface-card), 0 0 0 5px var(--games-accent);
+	.dot-pulse {
+		animation: finger-pulse var(--pulse-duration, 2s) ease-in-out infinite;
 	}
 	.dot-winner {
 		animation: finger-winner 1s ease-in-out infinite;
-		box-shadow: 0 0 0 3px var(--games-surface-card), 0 0 0 6px var(--games-accent);
+		box-shadow:
+			0 0 0 4px var(--games-surface-card),
+			0 0 0 7px var(--games-accent),
+			0 3px 12px rgb(74 36 16 / 0.22);
 		z-index: 10;
 	}
 	.dot-faded {
-		opacity: 0.2;
-		transform: scale(0.85);
+		opacity: 0.22;
+		transform: scale(0.88);
 		animation: none;
 	}
 
@@ -324,18 +343,18 @@
 			opacity: 1;
 		}
 		50% {
-			transform: scale(1.06);
-			opacity: 0.92;
+			transform: scale(1.1);
+			opacity: 0.9;
 		}
 	}
 
 	@keyframes finger-winner {
 		0%,
 		100% {
-			transform: scale(1.15);
+			transform: scale(1.12);
 		}
 		50% {
-			transform: scale(1.28);
+			transform: scale(1.24);
 		}
 	}
 
@@ -349,6 +368,7 @@
 		text-align: center;
 		padding: var(--games-pad);
 		pointer-events: none;
+		z-index: 4;
 	}
 	.hint-title {
 		margin: 0;
@@ -370,6 +390,7 @@
 		align-items: center;
 		justify-content: center;
 		pointer-events: none;
+		z-index: 8;
 	}
 	.countdown-num {
 		font-size: clamp(4rem, 20vw, 7rem);
@@ -387,6 +408,7 @@
 		text-align: center;
 		pointer-events: none;
 		padding: var(--games-pad);
+		z-index: 8;
 	}
 	.winner-title {
 		margin: 0;
@@ -403,12 +425,12 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.dot-idle,
+		.dot-pulse,
 		.dot-winner {
 			animation: none;
 		}
-		.dot-highlight {
-			transform: scale(1.15);
+		.flash {
+			animation-duration: 120ms;
 		}
 	}
 </style>
