@@ -2,7 +2,11 @@
 	import { base } from '$app/paths';
 	import type { Locale } from '$lib/i18n/locales';
 	import { t } from '$lib/i18n/copy';
-	import { dotColor } from '$lib/games/finger-pick/colors';
+	import {
+		dotColor,
+		FINGER_DOT_COLORS,
+		shuffledColorIndices
+	} from '$lib/games/finger-pick/colors';
 	import {
 		SETTLE_MS,
 		COUNTDOWN_SECONDS,
@@ -25,7 +29,8 @@
 	let countdown = $state(0);
 	let winnerId = $state<number | null>(null);
 	let flashColor = $state<string | null>(null);
-	let nextColorIndex = $state(0);
+	/** Shuffled palette indices still available this round */
+	let colorPool = $state<number[]>(shuffledColorIndices());
 	let reducedMotion = $state(false);
 
 	let settleTimer: ReturnType<typeof setTimeout> | undefined;
@@ -57,7 +62,22 @@
 		countdown = 0;
 		winnerId = null;
 		flashColor = null;
-		nextColorIndex = 0;
+		colorPool = shuffledColorIndices();
+	}
+
+	function takeColorIndex(): number {
+		if (colorPool.length > 0) return colorPool.pop()!;
+		const used = new Set(fingers.map((f) => f.colorIndex));
+		for (let i = 0; i < FINGER_DOT_COLORS.length; i++) {
+			if (!used.has(i)) return i;
+		}
+		return 0;
+	}
+
+	function releaseColorIndex(colorIndex: number) {
+		if (!colorPool.includes(colorIndex)) {
+			colorPool = [...colorPool, colorIndex];
+		}
 	}
 
 	function localCoords(clientX: number, clientY: number) {
@@ -84,7 +104,7 @@
 		if (fingerMap.size >= MAX_FINGERS) return;
 
 		const { x, y } = localCoords(e.clientX, e.clientY);
-		const colorIndex = nextColorIndex++;
+		const colorIndex = takeColorIndex();
 		const map = new Map(fingerMap);
 		map.set(e.pointerId, { id: e.pointerId, x, y, colorIndex });
 		syncFingers(map);
@@ -114,8 +134,10 @@
 
 	function removePointer(pointerId: number) {
 		if (!fingerMap.has(pointerId)) return;
+		const removed = fingerMap.get(pointerId)!;
 		const map = new Map(fingerMap);
 		map.delete(pointerId);
+		releaseColorIndex(removed.colorIndex);
 		syncFingers(map);
 
 		if (phase === 'countdown' || phase === 'flash') {
@@ -219,9 +241,10 @@
 		{/if}
 
 		{#each fingers as finger (finger.id)}
+			{@const fill = dotColor(finger.colorIndex)}
 			<span
 				class={dotClass(finger.id)}
-				style="left: {finger.x}px; top: {finger.y}px; background-color: {dotColor(finger.colorIndex)}"
+				style="left: {finger.x}px; top: {finger.y}px; background-color: {fill}; --dot-ring: {fill}"
 			></span>
 		{/each}
 
@@ -292,15 +315,15 @@
 		inset: 0;
 		z-index: 15;
 		pointer-events: none;
-		animation: screen-flash 480ms ease-out forwards;
+		animation: screen-flash 780ms cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
 	}
 
 	@keyframes screen-flash {
 		0% {
 			opacity: 0;
 		}
-		18% {
-			opacity: 0.62;
+		42% {
+			opacity: 0.52;
 		}
 		100% {
 			opacity: 0;
@@ -309,10 +332,10 @@
 
 	.dot {
 		position: absolute;
-		width: 80px;
-		height: 80px;
-		margin-left: -40px;
-		margin-top: -40px;
+		width: 100px;
+		height: 100px;
+		margin-left: -50px;
+		margin-top: -50px;
 		border-radius: 50%;
 		pointer-events: none;
 		box-shadow: 0 3px 12px rgb(74 36 16 / 0.22);
@@ -326,8 +349,8 @@
 		animation: finger-winner 1s ease-in-out infinite;
 		box-shadow:
 			0 0 0 4px var(--games-surface-card),
-			0 0 0 7px var(--games-accent),
-			0 3px 12px rgb(74 36 16 / 0.22);
+			0 0 0 8px var(--dot-ring),
+			0 4px 16px rgb(74 36 16 / 0.25);
 		z-index: 10;
 	}
 	.dot-faded {

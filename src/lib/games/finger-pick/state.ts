@@ -10,7 +10,7 @@ export type Finger = {
 export const SETTLE_MS = 400;
 export const COUNTDOWN_SECONDS = 3;
 export const MAX_FINGERS = 10;
-export const FLASH_MS = 480;
+export const FLASH_MS = 780;
 
 /** Pulse cycle length (seconds) — shorter = faster as countdown nears zero. */
 export function pulseDurationSec(countdown: number): number {
