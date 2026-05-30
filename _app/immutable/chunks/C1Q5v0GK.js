@@ -1,0 +1,1 @@
+var e=[`#e15600`,`#2e86ab`,`#a23b72`,`#f18f01`,`#c73e1d`,`#3b8c3e`,`#6b4c9a`,`#12b8a0`,`#d4a017`,`#5c4d7d`,`#e84855`,`#1d6f42`];function t(t){return e[t%e.length]??e[0]}function n(){let t=e.map((e,t)=>t);for(let e=t.length-1;e>0;e--){let n=Math.floor(Math.random()*(e+1)),r=t[e];t[e]=t[n],t[n]=r}return t}export{t as n,n as r,e as t};
