@@ -77,7 +77,31 @@ export type Copy = {
 		email: string;
 		linkedin: string;
 	};
-	footer: { rights: string; availability: string };
+	footer: { rights: string; availability: string; cvDownload: string };
+	games: {
+		modalTitle: string;
+		modalBody: string;
+		modalContinue: string;
+		modalCancel: string;
+		kickerTop: string;
+		hubTitle: string;
+		hubLead: string;
+		empty: string;
+		emptySub: string;
+		play: string;
+		soon: string;
+		back: string;
+		mobileOnlyHub: string;
+		mobileBadge: string;
+		fingerPick: {
+			metaTitle: string;
+			waiting: string;
+			waitingSub: string;
+			winner: string;
+			playAgain: string;
+			back: string;
+		};
+	};
 };
 
 export const copy: Record<Locale, Copy> = {
@@ -278,7 +302,34 @@ export const copy: Record<Locale, Copy> = {
 		},
 		footer: {
 			rights: 'Albert Sylvester',
-			availability: 'Concept- and front-end developer. Copenhagen.'
+			availability: 'Concept- and front-end developer. Copenhagen.',
+			cvDownload: 'Download CV'
+		},
+		games: {
+			modalTitle: 'Continue to Sylvester Games?',
+			modalBody:
+				'A side room for small browser games and experiments. You\'re leaving the main portfolio — same person, fewer suits.',
+			modalContinue: 'Continue',
+			modalCancel: 'Not now',
+			kickerTop: 'Sylvester Games · Noindex',
+			hubTitle: 'Sylvester Games',
+			hubLead: 'Small experiments and side projects. More coming soon.',
+			empty: 'No games yet — check back later.',
+			emptySub: 'This room fills up as I finish things. Nothing to play right now.',
+			play: 'Play',
+			soon: 'Soon',
+			back: '← Back to portfolio',
+			mobileOnlyHub:
+				'Finger Pick is built for a phone on the table — open Sylvester Games on your mobile to play.',
+			mobileBadge: 'Mobile',
+			fingerPick: {
+				metaTitle: 'Finger Pick',
+				waiting: 'Place one finger each',
+				waitingSub: 'Need at least two fingers to start',
+				winner: 'Picked!',
+				playAgain: 'Tap to play again',
+				back: '←'
+			}
 		}
 	},
 	da: {
@@ -478,7 +529,34 @@ export const copy: Record<Locale, Copy> = {
 		},
 		footer: {
 			rights: 'Albert Sylvester',
-			availability: 'Koncept- og front-end-udvikler. København.'
+			availability: 'Koncept- og front-end-udvikler. København.',
+			cvDownload: 'Hent CV'
+		},
+		games: {
+			modalTitle: 'Fortsæt til Sylvester Games?',
+			modalBody:
+				'Et siderum til små browserspil og eksperimenter. Du forlader hovedsiden — samme person, færre jakkesæt.',
+			modalContinue: 'Fortsæt',
+			modalCancel: 'Ikke nu',
+			kickerTop: 'Sylvester Games · Noindex',
+			hubTitle: 'Sylvester Games',
+			hubLead: 'Små eksperimenter og sideprojekter. Mere på vej.',
+			empty: 'Ingen spil endnu — kig forbi igen.',
+			emptySub: 'Rummet fyldes op, efterhånden som jeg bliver færdig. Intet at spille lige nu.',
+			play: 'Spil',
+			soon: 'Snart',
+			back: '← Tilbage til portfolio',
+			mobileOnlyHub:
+				'Finger Pick er lavet til en telefon på bordet — åbn Sylvester Games på mobilen for at spille.',
+			mobileBadge: 'Mobil',
+			fingerPick: {
+				metaTitle: 'Finger Pick',
+				waiting: 'Én finger hver',
+				waitingSub: 'Mindst to fingre for at starte',
+				winner: 'Valgt!',
+				playAgain: 'Tryk for at spille igen',
+				back: '←'
+			}
 		}
 	}
 };
