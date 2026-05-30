@@ -1,0 +1,1 @@
+var e=`sylvester-games-unlocked`,t=`sylvester-games-locale`;function n(){return typeof sessionStorage>`u`?!1:sessionStorage.getItem(e)===`1`}function r(n){sessionStorage.setItem(e,`1`),sessionStorage.setItem(t,n)}function i(){return typeof sessionStorage>`u`?`en`:sessionStorage.getItem(`sylvester-games-locale`)===`da`?`da`:`en`}export{n,r,i as t};

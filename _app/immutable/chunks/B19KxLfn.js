@@ -1,0 +1,1 @@
+function e(){return window.matchMedia(`(pointer: coarse)`).matches&&window.matchMedia(`(max-width: 48rem)`).matches}export{e as t};
