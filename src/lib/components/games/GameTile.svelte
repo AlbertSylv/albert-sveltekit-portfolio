@@ -5,6 +5,7 @@
 	let {
 		game,
 		locale,
+		base = '',
 		href,
 		playLabel,
 		soonLabel,
@@ -13,6 +14,7 @@
 	}: {
 		game: GameEntry;
 		locale: Locale;
+		base?: string;
 		href?: string;
 		playLabel: string;
 		soonLabel: string;
@@ -20,7 +22,9 @@
 		compact?: boolean;
 	} = $props();
 
-	const statusLabel = $derived(game.live ? 'LIVE' : soonLabel.toUpperCase());
+	const thumbUrl = $derived(game.thumbSrc ? `${base}/${game.thumbSrc}` : null);
+	const thumbAlt = $derived(game.thumbAlt?.[locale] ?? game.title);
+
 	const ctaLabel = $derived(game.live ? playLabel : soonLabel);
 	const isLink = $derived(Boolean(game.live && href));
 </script>
@@ -32,10 +36,16 @@
 	{href}
 	aria-disabled={!isLink ? 'true' : undefined}
 >
-	<div class="thumb">
-		<div class="thumb-hatch" aria-hidden="true"></div>
-		<span class="thumb-frame" aria-hidden="true"></span>
-		<span class="status-pill" class:status-soon={!game.live}>{statusLabel}</span>
+	<div class="thumb" class:thumb-has-art={Boolean(thumbUrl)}>
+		{#if thumbUrl}
+			<img class="thumb-img" src={thumbUrl} alt={thumbAlt} width="560" height="560" loading="lazy" decoding="async" />
+		{:else}
+			<div class="thumb-hatch" aria-hidden="true"></div>
+			<span class="thumb-frame" aria-hidden="true"></span>
+		{/if}
+		{#if !game.live}
+			<span class="status-pill status-soon">{soonLabel.toUpperCase()}</span>
+		{/if}
 	</div>
 	<div class="tile-body">
 		<div class="tile-kicker">
@@ -85,6 +95,15 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+	.thumb-has-art {
+		background: var(--games-surface-card);
+	}
+	.thumb-img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
 	}
 	.thumb-hatch {
 		position: absolute;

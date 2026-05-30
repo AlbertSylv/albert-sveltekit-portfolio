@@ -10,6 +10,9 @@ export type GameEntry = {
 	/** Path after site base, e.g. `/sylvester-games/finger-pick` */
 	path?: string;
 	mobileOnly?: boolean;
+	/** Static asset path without leading slash, e.g. `images/games/finger-pick-thumb.png` */
+	thumbSrc?: string;
+	thumbAlt?: Record<Locale, string>;
 };
 
 export const gamesCatalog: GameEntry[] = [
@@ -21,6 +24,11 @@ export const gamesCatalog: GameEntry[] = [
 		live: true,
 		mobileOnly: true,
 		path: '/sylvester-games/finger-pick',
+		thumbSrc: 'images/games/finger-pick-thumb.png',
+		thumbAlt: {
+			en: 'Finger Pick — four hands touching colored dots on a phone.',
+			da: 'Finger Pick — fire hænder rører farvede prikker på en telefon.'
+		},
 		description: {
 			en: 'Everyone puts a finger on the screen — one dot wins after the countdown.',
 			da: 'Alle lægger en finger på skærmen — én prik vinder efter nedtællingen.'

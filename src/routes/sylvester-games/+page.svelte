@@ -56,6 +56,7 @@
 				{#each visibleGames as game (game.id)}
 					<GameTile
 						{game}
+						{base}
 						locale={gamesLocale}
 						href={gameHref(base, game)}
 						playLabel={tr.play}
@@ -112,7 +113,7 @@
 		margin: 16px 0 0;
 		color: var(--games-muted);
 		font-size: 1.0625rem;
-		max-width: 44ch;
+		max-width: 52ch;
 		line-height: 1.56;
 	}
 	.hub-panel {
@@ -142,10 +143,33 @@
 		display: grid;
 		gap: clamp(10px, 2.5vw, 18px);
 		padding: 16px var(--games-pad) var(--games-pad);
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
 	}
+	/* One game: use panel width with a horizontal card on wider viewports */
 	.hub-grid-single {
-		grid-template-columns: minmax(0, 16rem);
-		justify-content: center;
+		grid-template-columns: 1fr;
+	}
+	@media (min-width: 34rem) {
+		.hub-grid-single :global(.tile) {
+			flex-direction: row;
+			align-items: stretch;
+		}
+		.hub-grid-single :global(.thumb) {
+			flex: 0 0 clamp(10rem, 34vw, 15.5rem);
+			width: clamp(10rem, 34vw, 15.5rem);
+			aspect-ratio: 1;
+			align-self: center;
+			border-bottom: none;
+			border-right: 1px solid var(--games-border);
+		}
+		.hub-grid-single :global(.tile-body) {
+			justify-content: center;
+			padding: clamp(14px, 3vw, 22px) clamp(16px, 3vw, 24px);
+		}
+		.hub-grid-single :global(.tile-desc) {
+			-webkit-line-clamp: 3;
+			line-clamp: 3;
+		}
 	}
 	.hub-back-wrap {
 		margin: 0;

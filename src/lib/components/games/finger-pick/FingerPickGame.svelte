@@ -290,13 +290,11 @@
 		padding: 0.35rem 0.5rem;
 		font-size: 0.75rem;
 		font-weight: 600;
-		color: var(--games-faint);
-		opacity: 0.4;
+		color: var(--games-ink);
 		text-decoration: none;
 		line-height: 1;
 	}
 	.back:focus-visible {
-		opacity: 1;
 		outline: 2px solid var(--games-border-strong);
 		outline-offset: 2px;
 	}
