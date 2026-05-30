@@ -14,7 +14,9 @@
 	let locale = $state<Locale>(defaultLocale);
 	let allowed = $state(false);
 	const homeHref = $derived(localizedHref(locale, ''));
-	const immersive = $derived(page.url.pathname.includes('/finger-pick'));
+	const immersive = $derived(
+		page.url.pathname.includes('/finger-pick') || page.url.pathname.includes('/insync')
+	);
 
 	$effect(() => {
 		if (!browser) return;

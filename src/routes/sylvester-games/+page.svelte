@@ -52,7 +52,7 @@
 			<div class="hub-grid-head">
 				<span class="hub-grid-count">{experimentCount(gamesLocale, visibleGames.length)}</span>
 			</div>
-			<div class="hub-grid hub-grid-single">
+			<div class="hub-grid" class:hub-grid-single={visibleGames.length === 1}>
 				{#each visibleGames as game (game.id)}
 					<GameTile
 						{game}

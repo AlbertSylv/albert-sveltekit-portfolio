@@ -105,6 +105,7 @@
 		height: 100%;
 		object-fit: cover;
 	}
+
 	.thumb-hatch {
 		position: absolute;
 		inset: 0;

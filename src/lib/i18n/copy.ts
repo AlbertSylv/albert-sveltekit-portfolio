@@ -101,6 +101,38 @@ export type Copy = {
 			playAgain: string;
 			back: string;
 		};
+		insync: {
+			metaTitle: string;
+			title: string;
+			teamsSub: string;
+			teamALabel: string;
+			teamBLabel: string;
+			defaultTeamA: string;
+			defaultTeamB: string;
+			start: string;
+			back: string;
+			roundLabel: string;
+			turnKicker: string;
+			handoffPass: string;
+			handoffHint: string;
+			handoffPsychicButton: string;
+			psychicOnly: string;
+			psychicDone: string;
+			guessKicker: string;
+			revealButton: string;
+			revealKicker: string;
+			revealTargetLabel: string;
+			revealGuessLabel: string;
+			pointsEarned: string;
+			zoneLegend: string;
+			nextRound: string;
+			seeFinalScores: string;
+			gameOverTitle: string;
+			gameOverWinner: string;
+			gameOverTie: string;
+			playAgain: string;
+			verdict: Record<'perfect' | 'close' | 'mid' | 'far', string>;
+		};
 	};
 };
 
@@ -318,7 +350,7 @@ export const copy: Record<Locale, Copy> = {
 			emptySub: 'This room fills up as I finish things. Nothing to play right now.',
 			play: 'Play',
 			soon: 'Soon',
-			back: '← Back to portfolio',
+			back: '← Home',
 			mobileOnlyHub:
 				'Finger Pick is built for a phone on the table — open Sylvester Games on your mobile to play.',
 			mobileBadge: 'Mobile',
@@ -328,7 +360,44 @@ export const copy: Record<Locale, Copy> = {
 				waitingSub: 'Need at least two fingers to start',
 				winner: 'Picked!',
 				playAgain: 'Tap to play again',
-				back: '←'
+				back: '← Games'
+			},
+			insync: {
+				metaTitle: 'InSync',
+				title: 'InSync',
+				teamsSub: '{rounds} rounds — highest score wins.',
+				teamALabel: 'Team A',
+				teamBLabel: 'Team B',
+				defaultTeamA: 'Blue team',
+				defaultTeamB: 'Purple team',
+				start: 'Start game',
+				back: '← Games',
+				roundLabel: 'Round {current}/{total}',
+				turnKicker: "{team}'s turn",
+				handoffPass: 'Hand the phone to the Psychic on {team}',
+				handoffHint: 'Everyone can read the card. Only the Psychic taps below.',
+				handoffPsychicButton: "I'm the Psychic",
+				psychicOnly: 'Only you — memorize the number',
+				psychicDone: 'Done',
+				guessKicker: '{team} — move the slider',
+				revealButton: 'Reveal',
+				revealKicker: 'Reveal',
+				revealTargetLabel: 'Target',
+				revealGuessLabel: 'Guess',
+				pointsEarned: '+{n} pts',
+				zoneLegend: 'Closer to the target = more points (3 · 2 · 1)',
+				nextRound: 'Next round',
+				seeFinalScores: 'Final scores',
+				gameOverTitle: 'Game over',
+				gameOverWinner: '{team} wins!',
+				gameOverTie: "It's a tie!",
+				playAgain: 'Play again',
+				verdict: {
+					perfect: 'Perfect sync!',
+					close: 'Pretty close!',
+					mid: 'Getting warm…',
+					far: 'Not quite in sync.'
+				}
 			}
 		}
 	},
@@ -545,7 +614,7 @@ export const copy: Record<Locale, Copy> = {
 			emptySub: 'Rummet fyldes op, efterhånden som jeg bliver færdig. Intet at spille lige nu.',
 			play: 'Spil',
 			soon: 'Snart',
-			back: '← Tilbage til portfolio',
+			back: '← Forside',
 			mobileOnlyHub:
 				'Finger Pick er lavet til en telefon på bordet — åbn Sylvester Games på mobilen for at spille.',
 			mobileBadge: 'Mobil',
@@ -555,7 +624,44 @@ export const copy: Record<Locale, Copy> = {
 				waitingSub: 'Mindst to fingre for at starte',
 				winner: 'Valgt!',
 				playAgain: 'Tryk for at spille igen',
-				back: '←'
+				back: '← Spilforside'
+			},
+			insync: {
+				metaTitle: 'InSync',
+				title: 'InSync',
+				teamsSub: '{rounds} runder — flest point vinder.',
+				teamALabel: 'Hold A',
+				teamBLabel: 'Hold B',
+				defaultTeamA: 'Blåt hold',
+				defaultTeamB: 'Lilla hold',
+				start: 'Start spil',
+				back: '← Spilforside',
+				roundLabel: 'Runde {current}/{total}',
+				turnKicker: '{team}s tur',
+				handoffPass: 'Giv telefonen til Psychic på {team}',
+				handoffHint: 'Alle må læse kortet. Kun Psychic trykker nedenfor.',
+				handoffPsychicButton: 'Jeg er Psychic',
+				psychicOnly: 'Kun dig — husk tallet',
+				psychicDone: 'Færdig',
+				guessKicker: '{team} — flyt slideren',
+				revealButton: 'Afslør',
+				revealKicker: 'Afslør',
+				revealTargetLabel: 'Mål',
+				revealGuessLabel: 'Gæt',
+				pointsEarned: '+{n} point',
+				zoneLegend: 'Tættere på målet = flere point (3 · 2 · 1)',
+				nextRound: 'Næste runde',
+				seeFinalScores: 'Slutresultat',
+				gameOverTitle: 'Spillet er slut',
+				gameOverWinner: '{team} vinder!',
+				gameOverTie: 'Uafgjort!',
+				playAgain: 'Spil igen',
+				verdict: {
+					perfect: 'Perfekt sync!',
+					close: 'Ret tæt på!',
+					mid: 'Varmt…',
+					far: 'Ikke helt in sync.'
+				}
 			}
 		}
 	}

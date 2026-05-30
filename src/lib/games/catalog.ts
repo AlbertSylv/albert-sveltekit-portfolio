@@ -33,6 +33,23 @@ export const gamesCatalog: GameEntry[] = [
 			en: 'Everyone puts a finger on the screen — one dot wins after the countdown.',
 			da: 'Alle lægger en finger på skærmen — én prik vinder efter nedtællingen.'
 		}
+	},
+	{
+		id: 'insync',
+		category: 'PARTY',
+		year: '2026',
+		title: 'InSync',
+		live: true,
+		path: '/sylvester-games/insync',
+		thumbSrc: 'images/games/insync-thumb.png',
+		thumbAlt: {
+			en: 'InSync — logo with sine waves and a slider.',
+			da: 'InSync — logo med sinusbølger og en slider.'
+		},
+		description: {
+			en: 'Five rounds, two teams — sync the slider to the Psychic’s secret number. Highest score wins.',
+			da: 'Fem runder, to hold — sync slideren til Psychics hemmelige tal. Flest point vinder.'
+		}
 	}
 ];
 

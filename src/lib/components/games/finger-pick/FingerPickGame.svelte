@@ -21,7 +21,7 @@
 	let { locale }: { locale: Locale } = $props();
 
 	const tr = $derived(t(locale).games.fingerPick);
-	const hubHref = `${base}/sylvester-games`;
+	const gamesHubHref = `${base}/sylvester-games`;
 
 	let playEl: HTMLDivElement | undefined;
 	let phase = $state<FingerPhase>('waiting');
@@ -217,7 +217,7 @@
 </script>
 
 <div class="finger-pick">
-	<a class="back" href={hubHref} aria-label={tr.back}>{tr.back}</a>
+	<a class="back" href={gamesHubHref} aria-label={tr.back}>{tr.back}</a>
 
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<div
