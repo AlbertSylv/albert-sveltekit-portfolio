@@ -7,7 +7,13 @@
 	import { createDeck, drawCard, type DeckState } from '$lib/games/insync/deck';
 	import { formatScaleValue, randomTarget } from '$lib/games/insync/scale';
 	import { syncVerdict, verdictPoints } from '$lib/games/insync/scoring';
-	import { initialRoundState, ROUNDS_PER_GAME, type RoundState } from '$lib/games/insync/state';
+	import {
+		DEFAULT_ROUNDS_PER_GAME,
+		initialRoundState,
+		ROUNDS_MAX,
+		ROUNDS_MIN,
+		type RoundState
+	} from '$lib/games/insync/state';
 	import {
 		activeTeamName,
 		TEAM_A_COLOR,
@@ -30,6 +36,11 @@
 
 	let teamAInput = $state('');
 	let teamBInput = $state('');
+	let roundsInput = $state(DEFAULT_ROUNDS_PER_GAME);
+
+	function clampRounds(n: number): number {
+		return Math.min(ROUNDS_MAX, Math.max(ROUNDS_MIN, Math.round(n)));
+	}
 
 	const accent = $derived(teamAccent(round.activeTeam));
 	const teamName = $derived(activeTeamName(round));
@@ -60,14 +71,21 @@
 	const roundLabel = $derived(
 		tr.roundLabel
 			.replace('{current}', String(round.roundNumber))
-			.replace('{total}', String(ROUNDS_PER_GAME))
+			.replace('{total}', String(round.roundsPerGame))
 	);
 
 	const pointsThisRound = $derived(
 		verdictKey != null && revealTargetValue != null ? verdictPoints(verdictKey) : 0
 	);
 
-	const isLastRound = $derived(round.roundNumber >= ROUNDS_PER_GAME);
+	/** True when Team B just finished the final full round */
+	const isLastTurn = $derived(
+		round.roundNumber >= round.roundsPerGame && round.activeTeam === 'B'
+	);
+
+	const revealContinueLabel = $derived(
+		isLastTurn ? tr.seeFinalScores : round.activeTeam === 'A' ? tr.nextTurn : tr.nextRound
+	);
 
 	const gameWinner = $derived.by((): 'A' | 'B' | 'tie' | null => {
 		if (round.phase !== 'gameOver') return null;
@@ -92,12 +110,15 @@
 	function startGame() {
 		const a = teamAInput.trim() || tr.defaultTeamA;
 		const b = teamBInput.trim() || tr.defaultTeamB;
+		const roundsPerGame = clampRounds(roundsInput);
+		roundsInput = roundsPerGame;
 		round = {
 			...initialRoundState(),
 			teamA: a,
 			teamB: b,
 			activeTeam: 'A',
 			roundNumber: 1,
+			roundsPerGame,
 			scoreA: 0,
 			scoreB: 0,
 			phase: 'handoff'
@@ -145,17 +166,21 @@
 		if (currentCard) {
 			deck = { ...deck, discard: [...deck.discard, currentCard] };
 		}
-		if (round.roundNumber >= ROUNDS_PER_GAME) {
+		const nextTeam = round.activeTeam === 'A' ? 'B' : 'A';
+		let nextRoundNumber = round.roundNumber;
+		if (round.activeTeam === 'B') {
+			nextRoundNumber = round.roundNumber + 1;
+		}
+		if (nextRoundNumber > round.roundsPerGame) {
 			round = { ...round, scoreA, scoreB, phase: 'gameOver' };
 			return;
 		}
-		const nextTeam = round.activeTeam === 'A' ? 'B' : 'A';
 		round = {
 			...round,
 			scoreA,
 			scoreB,
 			activeTeam: nextTeam,
-			roundNumber: round.roundNumber + 1
+			roundNumber: nextRoundNumber
 		};
 		beginRound();
 	}
@@ -167,6 +192,7 @@
 		storedTarget = null;
 		teamAInput = '';
 		teamBInput = '';
+		roundsInput = DEFAULT_ROUNDS_PER_GAME;
 	}
 </script>
 
@@ -177,7 +203,19 @@
 		{#if round.phase === 'teams'}
 			<section class="panel panel-teams">
 				<h1 class="title">{tr.title}</h1>
-				<p class="teams-sub">{tr.teamsSub.replace('{rounds}', String(ROUNDS_PER_GAME))}</p>
+				<p class="teams-sub">{tr.teamsSub.replace('{rounds}', String(roundsInput))}</p>
+				<div class="rounds-picker">
+					<label class="rounds-label" for="insync-rounds">{tr.roundsLabel}</label>
+					<input
+						id="insync-rounds"
+						class="rounds-input"
+						type="number"
+						min={ROUNDS_MIN}
+						max={ROUNDS_MAX}
+						bind:value={roundsInput}
+						onchange={() => (roundsInput = clampRounds(roundsInput))}
+					/>
+				</div>
 				<div class="team-cards">
 					<label class="team-card team-card-a" style="--team-color: {TEAM_A_COLOR}">
 						<span class="team-card-label">{tr.teamALabel}</span>
@@ -303,7 +341,7 @@
 				</p>
 				<div class="panel-footer">
 					<button type="button" class="btn-primary" onclick={nextRound}>
-						{isLastRound ? tr.seeFinalScores : tr.nextRound}
+						{revealContinueLabel}
 					</button>
 				</div>
 			</section>
@@ -430,6 +468,42 @@
 		letter-spacing: -0.03em;
 	}
 
+	.rounds-picker {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.75rem;
+		padding: 0.65rem 0.85rem;
+		background: var(--games-surface-card);
+		border: 1px solid var(--games-border);
+		border-radius: 2px;
+	}
+
+	.rounds-label {
+		font-size: 0.8125rem;
+		font-weight: 600;
+		color: var(--games-ink);
+	}
+
+	.rounds-input {
+		width: 4rem;
+		font: inherit;
+		font-size: 1rem;
+		font-weight: 700;
+		font-variant-numeric: tabular-nums;
+		text-align: center;
+		padding: 0.35rem 0.5rem;
+		border: 1px solid var(--games-border-strong);
+		border-radius: 2px;
+		background: var(--games-bg);
+		color: var(--games-ink);
+	}
+
+	.rounds-input:focus-visible {
+		outline: 2px solid var(--games-border-strong);
+		outline-offset: 2px;
+	}
+
 	.team-cards {
 		flex: 1;
 		min-height: 0;
@@ -437,7 +511,7 @@
 		flex-direction: column;
 		justify-content: center;
 		gap: 0.65rem;
-		margin-top: 0.5rem;
+		margin-top: 0.35rem;
 	}
 
 	.team-card {

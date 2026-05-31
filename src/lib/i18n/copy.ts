@@ -105,6 +105,7 @@ export type Copy = {
 			metaTitle: string;
 			title: string;
 			teamsSub: string;
+			roundsLabel: string;
 			teamALabel: string;
 			teamBLabel: string;
 			defaultTeamA: string;
@@ -125,6 +126,7 @@ export type Copy = {
 			revealGuessLabel: string;
 			pointsEarned: string;
 			zoneLegend: string;
+			nextTurn: string;
 			nextRound: string;
 			seeFinalScores: string;
 			gameOverTitle: string;
@@ -365,7 +367,8 @@ export const copy: Record<Locale, Copy> = {
 			insync: {
 				metaTitle: 'InSync',
 				title: 'InSync',
-				teamsSub: '{rounds} rounds — highest score wins.',
+				teamsSub: '{rounds} rounds — each team plays once per round. Highest score wins.',
+				roundsLabel: 'Number of rounds',
 				teamALabel: 'Team A',
 				teamBLabel: 'Team B',
 				defaultTeamA: 'Blue team',
@@ -386,6 +389,7 @@ export const copy: Record<Locale, Copy> = {
 				revealGuessLabel: 'Guess',
 				pointsEarned: '+{n} pts',
 				zoneLegend: 'Closer to the target = more points (3 · 2 · 1)',
+				nextTurn: 'Next turn',
 				nextRound: 'Next round',
 				seeFinalScores: 'Final scores',
 				gameOverTitle: 'Game over',
@@ -629,7 +633,8 @@ export const copy: Record<Locale, Copy> = {
 			insync: {
 				metaTitle: 'InSync',
 				title: 'InSync',
-				teamsSub: '{rounds} runder — flest point vinder.',
+				teamsSub: '{rounds} runder — hvert hold spiller én gang per runde. Flest point vinder.',
+				roundsLabel: 'Antal runder',
 				teamALabel: 'Hold A',
 				teamBLabel: 'Hold B',
 				defaultTeamA: 'Blåt hold',
@@ -650,6 +655,7 @@ export const copy: Record<Locale, Copy> = {
 				revealGuessLabel: 'Gæt',
 				pointsEarned: '+{n} point',
 				zoneLegend: 'Tættere på målet = flere point (3 · 2 · 1)',
+				nextTurn: 'Næste tur',
 				nextRound: 'Næste runde',
 				seeFinalScores: 'Slutresultat',
 				gameOverTitle: 'Spillet er slut',

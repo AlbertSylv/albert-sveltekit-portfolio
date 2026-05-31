@@ -22,6 +22,11 @@ export type GameMode = 'casual' | 'competitive';
 
 export type InSyncPhase = 'teams' | 'handoff' | 'psychic' | 'guess' | 'reveal' | 'gameOver';
 
-export const ROUNDS_PER_GAME = 5;
+/** Default full rounds (both teams play once per round) */
+export const DEFAULT_ROUNDS_PER_GAME = 5;
+export const ROUNDS_MIN = 3;
+export const ROUNDS_MAX = 12;
+/** @deprecated Use DEFAULT_ROUNDS_PER_GAME */
+export const ROUNDS_PER_GAME = DEFAULT_ROUNDS_PER_GAME;
 
 export type ActiveTeam = 'A' | 'B';

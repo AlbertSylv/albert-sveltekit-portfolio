@@ -1,5 +1,5 @@
 import type { ActiveTeam, GameMode, InSyncPhase } from './types';
-import { ROUNDS_PER_GAME } from './types';
+import { DEFAULT_ROUNDS_PER_GAME } from './types';
 
 export type { ActiveTeam };
 
@@ -9,7 +9,9 @@ export type RoundState = {
 	teamA: string;
 	teamB: string;
 	activeTeam: ActiveTeam;
+	/** Full rounds (each team plays once); 1..roundsPerGame */
 	roundNumber: number;
+	roundsPerGame: number;
 	scoreA: number;
 	scoreB: number;
 	cardId: string | null;
@@ -25,6 +27,7 @@ export function initialRoundState(): RoundState {
 		teamB: '',
 		activeTeam: 'A',
 		roundNumber: 1,
+		roundsPerGame: DEFAULT_ROUNDS_PER_GAME,
 		scoreA: 0,
 		scoreB: 0,
 		cardId: null,
@@ -33,4 +36,4 @@ export function initialRoundState(): RoundState {
 	};
 }
 
-export { ROUNDS_PER_GAME };
+export { DEFAULT_ROUNDS_PER_GAME, ROUNDS_MAX, ROUNDS_MIN } from './types';
