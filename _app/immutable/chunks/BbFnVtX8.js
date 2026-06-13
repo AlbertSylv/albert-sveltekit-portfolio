@@ -1,1 +1,0 @@
-import{l as e}from"./OGAIzK9A.js";function t(t){let n=t.replace(/\/$/,``)||`/`;e&&n.startsWith(e)&&(n=n.slice(e.length)||`/`);let r=n.match(/^\/(da|en)(\/.*)?$/);return r?r[2]??``:``}function n(t,n=``){return`${e}/${t}${n===`/`?``:n}`}export{t as n,n as t};
