@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { pointBandsForTarget, SCORING_ZONE_COLORS, type BandLayout } from '$lib/games/insync/scoring';
-	import { formatScaleValue, percentToValue, SCALE_MAX, SCALE_MIN, valueToPercent } from '$lib/games/insync/scale';
+	import { magnitudeOf, percentToValue, SCALE_MAX, SCALE_MIN, sideOf, valueToPercent } from '$lib/games/insync/scale';
 
 	const THUMB_INSET = 20;
 
@@ -13,6 +13,8 @@
 		disabled = false,
 		accentColor = 'var(--games-ink)',
 		zoneLegend = '',
+		centerLabel = '0',
+		showLabels = true,
 		onInput
 	}: {
 		leftLabel: string;
@@ -25,11 +27,19 @@
 		accentColor?: string;
 		/** Shown under track when point bands are visible */
 		zoneLegend?: string;
+		/** Copy shown when the value sits at the neutral center */
+		centerLabel?: string;
+		/** Show the pole labels above the track (hide when a SpectrumCard already shows them) */
+		showLabels?: boolean;
 		onInput?: (v: number) => void;
 	} = $props();
 
 	const showLiveValue = $derived(mode === 'guess' && !disabled);
-	const liveDisplay = $derived(formatScaleValue(value));
+	const liveSide = $derived(sideOf(value));
+	const liveMagnitude = $derived(magnitudeOf(value));
+	const livePole = $derived(
+		liveSide === 'left' ? leftLabel : liveSide === 'right' ? rightLabel : centerLabel
+	);
 
 	const interactive = $derived(mode === 'guess' && !disabled);
 	const showThumb = $derived(mode === 'guess' || mode === 'reveal');
@@ -105,12 +115,24 @@
 
 <div class="slider-wrap" style={mode === 'guess' ? `--thumb-color: ${accentColor}` : undefined}>
 	{#if showLiveValue}
-		<p class="live-value" style="color: {accentColor}" aria-live="polite">{liveDisplay}</p>
+		<div class="live-readout" style="color: {accentColor}" aria-live="polite">
+			{#if liveSide === 'center'}
+				<div class="live-pole"><span class="live-pole-text">{centerLabel}</span></div>
+				<div class="live-arrow" aria-hidden="true">&nbsp;</div>
+				<div class="live-magnitude" aria-hidden="true">&nbsp;</div>
+			{:else}
+				<div class="live-pole"><span class="live-pole-text">{livePole}</span></div>
+				<div class="live-arrow">{liveSide === 'left' ? '←' : '→'}</div>
+				<div class="live-magnitude">{liveMagnitude}</div>
+			{/if}
+		</div>
 	{/if}
-	<div class="labels">
-		<span class="label label-left">{leftLabel}</span>
-		<span class="label label-right">{rightLabel}</span>
-	</div>
+	{#if showLabels}
+		<div class="labels">
+			<span class="label label-left">{leftLabel}</span>
+			<span class="label label-right">{rightLabel}</span>
+		</div>
+	{/if}
 
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<div
@@ -160,12 +182,6 @@
 		</div>
 	</div>
 
-	<div class="scale-ends" aria-hidden="true">
-		<span>{SCALE_MIN}</span>
-		<span>0</span>
-		<span>+{SCALE_MAX}</span>
-	</div>
-
 	{#if showScoringZones && zoneLegend}
 		<p class="zone-legend">{zoneLegend}</p>
 	{/if}
@@ -177,9 +193,42 @@
 		flex-shrink: 0;
 	}
 
-	.live-value {
+	.live-readout {
 		margin: 0 0 clamp(0.35rem, 1.5dvh, 0.6rem);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.1rem;
 		text-align: center;
+	}
+
+	.live-pole {
+		/* Fixed two-line height so the row never jumps when the word wraps */
+		height: 2.4em;
+		line-height: 1.15;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: clamp(0.9rem, 3.5dvh, 1.35rem);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+	}
+
+	.live-pole-text {
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		line-clamp: 2;
+		overflow: hidden;
+	}
+
+	.live-arrow {
+		font-size: clamp(1.25rem, 5dvh, 2rem);
+		font-weight: 700;
+		line-height: 1;
+	}
+
+	.live-magnitude {
 		font-size: clamp(2rem, 10dvh, 3rem);
 		font-weight: 700;
 		font-variant-numeric: tabular-nums;
@@ -382,28 +431,6 @@
 		background: var(--games-accent);
 		border-radius: 1px;
 		flex-shrink: 0;
-	}
-
-	.scale-ends {
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		margin-top: 0.35rem;
-		font-size: 0.5625rem;
-		font-weight: 600;
-		letter-spacing: 0.06em;
-		color: var(--games-faint);
-	}
-
-	.scale-ends span:nth-child(1) {
-		text-align: left;
-	}
-
-	.scale-ends span:nth-child(2) {
-		text-align: center;
-	}
-
-	.scale-ends span:nth-child(3) {
-		text-align: right;
 	}
 
 	.zone-legend {

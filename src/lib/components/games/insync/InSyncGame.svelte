@@ -5,7 +5,7 @@
 	import { t } from '$lib/i18n/copy';
 	import { categoryLabel } from '$lib/games/insync/categories';
 	import { createDeck, drawCard, type DeckState } from '$lib/games/insync/deck';
-	import { formatScaleValue, randomTarget } from '$lib/games/insync/scale';
+	import { magnitudeOf, randomTarget, sideOf } from '$lib/games/insync/scale';
 	import { syncVerdict, verdictPoints } from '$lib/games/insync/scoring';
 	import {
 		DEFAULT_ROUNDS_PER_GAME,
@@ -64,9 +64,31 @@
 		return syncVerdict(revealTargetValue, round.guess);
 	});
 
-	const psychicDisplay = $derived(
-		round.phase === 'psychic' && round.target != null ? formatScaleValue(round.target) : null
+	/** Pole word for a signed value, or the neutral-center copy */
+	function poleWord(v: number): string {
+		const side = sideOf(v);
+		if (side === 'left') return labels?.left ?? '';
+		if (side === 'right') return labels?.right ?? '';
+		return tr.centerLabel;
+	}
+
+	/** Magnitude + pole readout, e.g. "75 · Influencer →" */
+	function magnitudePoleText(v: number): string {
+		const side = sideOf(v);
+		if (side === 'center') return tr.centerLabel;
+		const n = magnitudeOf(v);
+		return side === 'left' ? `← ${poleWord(v)} · ${n}` : `${n} · ${poleWord(v)} →`;
+	}
+
+	const psychicReady = $derived(round.phase === 'psychic' && round.target != null);
+	const psychicMagnitude = $derived(round.target != null ? magnitudeOf(round.target) : null);
+	const psychicSide = $derived(round.target != null ? sideOf(round.target) : 'center');
+	const psychicPoleWord = $derived(round.target != null ? poleWord(round.target) : '');
+
+	const revealTargetText = $derived(
+		revealTargetValue != null ? magnitudePoleText(revealTargetValue) : ''
 	);
+	const revealGuessText = $derived(magnitudePoleText(round.guess));
 
 	const roundLabel = $derived(
 		tr.roundLabel
@@ -245,22 +267,25 @@
 
 		{:else if round.phase === 'handoff' && labels}
 			<section class="panel">
-				<p class="round-badge">{roundLabel}</p>
-				<p class="phase-kicker">{tr.turnKicker.replace('{team}', teamName)}</p>
-				<p class="score-strip">
-					<span style="color: {TEAM_A_COLOR}">{round.teamA} {round.scoreA}</span>
-					<span class="score-sep">·</span>
-					<span style="color: {TEAM_B_COLOR}">{round.teamB} {round.scoreB}</span>
-				</p>
 				<div class="panel-main">
+					<div class="handoff-head">
+						<p class="turn-hero" style="color: {accent}">{tr.turnKicker.replace('{team}', teamName)}</p>
+						<p class="handoff-msg">{tr.handoffPass.replace('{team}', teamName)}</p>
+					</div>
 					<SpectrumCard
 						leftLabel={labels.left}
 						rightLabel={labels.right}
 						categoryLabel={labels.category}
 					/>
 				</div>
-				<p class="handoff-msg">{tr.handoffPass.replace('{team}', teamName)}</p>
 				<p class="hint">{tr.handoffHint}</p>
+				<p class="round-meta">
+					<span>{roundLabel}</span>
+					<span class="score-sep">·</span>
+					<span style="color: {TEAM_A_COLOR}">{round.teamA} {round.scoreA}</span>
+					<span class="score-sep">·</span>
+					<span style="color: {TEAM_B_COLOR}">{round.teamB} {round.scoreB}</span>
+				</p>
 				<div class="panel-footer">
 					<button type="button" class="btn-primary" onclick={enterPsychic}
 						>{tr.handoffPsychicButton}</button
@@ -268,12 +293,19 @@
 				</div>
 			</section>
 
-		{:else if round.phase === 'psychic' && labels && round.target != null && psychicDisplay}
+		{:else if round.phase === 'psychic' && labels && round.target != null && psychicReady}
 			<section class="panel panel-psychic">
-				<p class="round-badge">{roundLabel}</p>
 				<p class="phase-kicker">{tr.psychicOnly}</p>
-				<p class="psychic-value" style="color: {accent}" aria-live="polite">{psychicDisplay}</p>
 				<div class="panel-main">
+					<div class="psychic-readout" style="color: {accent}" aria-live="polite">
+						{#if psychicSide === 'center'}
+							<div class="psychic-pole"><span class="psychic-pole-text">{tr.centerLabel}</span></div>
+						{:else}
+							<div class="psychic-pole"><span class="psychic-pole-text">{psychicPoleWord}</span></div>
+							<div class="psychic-arrow">{psychicSide === 'left' ? '←' : '→'}</div>
+							<div class="psychic-magnitude">{psychicMagnitude}</div>
+						{/if}
+					</div>
 					<InSyncSlider
 						leftLabel={labels.left}
 						rightLabel={labels.right}
@@ -282,8 +314,10 @@
 						value={round.target}
 						disabled={true}
 						zoneLegend={tr.zoneLegend}
+						centerLabel={tr.centerLabel}
 					/>
 				</div>
+				<p class="psychic-action">{tr.psychicAction}</p>
 				<div class="panel-footer">
 					<button type="button" class="btn-primary" onclick={leavePsychic}
 						>{tr.psychicDone}</button
@@ -293,15 +327,21 @@
 
 		{:else if round.phase === 'guess' && labels}
 			<section class="panel">
-				<p class="round-badge">{roundLabel}</p>
-				<p class="phase-kicker">{tr.guessKicker.replace('{team}', teamName)}</p>
+				<p class="phase-kicker" style="color: {accent}">{tr.guessKicker.replace('{team}', teamName)}</p>
 				<div class="panel-main">
+					<SpectrumCard
+						leftLabel={labels.left}
+						rightLabel={labels.right}
+						categoryLabel={labels.category}
+					/>
 					<InSyncSlider
 						leftLabel={labels.left}
 						rightLabel={labels.right}
 						mode="guess"
 						value={round.guess}
 						accentColor={accent}
+						centerLabel={tr.centerLabel}
+						showLabels={false}
 						onInput={(v) => (round = { ...round, guess: v })}
 					/>
 				</div>
@@ -312,7 +352,6 @@
 
 		{:else if round.phase === 'reveal' && labels && revealTargetValue != null}
 			<section class="panel">
-				<p class="round-badge">{roundLabel}</p>
 				<p class="phase-kicker">{tr.revealKicker}</p>
 				<div class="panel-main">
 					<InSyncSlider
@@ -324,21 +363,27 @@
 						disabled={true}
 						accentColor={accent}
 						zoneLegend={tr.zoneLegend}
+						centerLabel={tr.centerLabel}
 					/>
+					<div class="reveal-result">
+						{#if verdictKey}
+							<p class="points-earned" style="color: {accent}">
+								{tr.pointsEarned.replace('{n}', String(pointsThisRound))}
+							</p>
+							<p class="verdict">{tr.verdict[verdictKey]}</p>
+						{/if}
+						<div class="reveal-compare">
+							<div class="compare-row">
+								<span class="compare-label">{tr.revealTargetLabel}</span>
+								<span class="compare-value">{revealTargetText}</span>
+							</div>
+							<div class="compare-row">
+								<span class="compare-label">{tr.revealGuessLabel}</span>
+								<span class="compare-value">{revealGuessText}</span>
+							</div>
+						</div>
+					</div>
 				</div>
-				{#if verdictKey}
-					<p class="points-earned" style="color: {accent}">
-						{tr.pointsEarned.replace('{n}', String(pointsThisRound))}
-					</p>
-					<p class="verdict">{tr.verdict[verdictKey]}</p>
-				{/if}
-				<p class="reveal-nums">
-					{tr.revealTargetLabel}
-					<strong>{formatScaleValue(revealTargetValue)}</strong>
-					·
-					{tr.revealGuessLabel}
-					<strong>{formatScaleValue(round.guess)}</strong>
-				</p>
 				<div class="panel-footer">
 					<button type="button" class="btn-primary" onclick={nextRound}>
 						{revealContinueLabel}
@@ -348,17 +393,7 @@
 
 		{:else if round.phase === 'gameOver'}
 			<section class="panel panel-gameover">
-				<h2 class="gameover-title">{tr.gameOverTitle}</h2>
-				<div class="final-scores">
-					<div class="final-row" style="--team-color: {TEAM_A_COLOR}">
-						<span class="final-name">{round.teamA}</span>
-						<span class="final-score">{round.scoreA}</span>
-					</div>
-					<div class="final-row" style="--team-color: {TEAM_B_COLOR}">
-						<span class="final-name">{round.teamB}</span>
-						<span class="final-score">{round.scoreB}</span>
-					</div>
-				</div>
+				<p class="gameover-kicker">{tr.gameOverTitle}</p>
 				{#if gameWinner === 'tie'}
 					<p class="gameover-result">{tr.gameOverTie}</p>
 				{:else if gameWinner === 'A'}
@@ -370,6 +405,16 @@
 						{tr.gameOverWinner.replace('{team}', round.teamB)}
 					</p>
 				{/if}
+				<div class="final-scores">
+					<div class="final-row" style="--team-color: {TEAM_A_COLOR}">
+						<span class="final-name">{round.teamA}</span>
+						<span class="final-score">{round.scoreA}</span>
+					</div>
+					<div class="final-row" style="--team-color: {TEAM_B_COLOR}">
+						<span class="final-name">{round.teamB}</span>
+						<span class="final-score">{round.scoreB}</span>
+					</div>
+				</div>
 				<div class="panel-footer">
 					<button type="button" class="btn-primary btn-marmalade" onclick={playAgain}
 						>{tr.playAgain}</button
@@ -387,9 +432,12 @@
 		--insync-safe-x: max(1rem, env(safe-area-inset-left));
 
 		position: fixed;
-		inset: 0;
+		top: 0;
+		left: 0;
+		right: 0;
 		height: 100dvh;
-		max-height: 100dvh;
+		height: 100svh;
+		max-height: 100svh;
 		background: var(--games-bg);
 		overflow: hidden;
 		overscroll-behavior: none;
@@ -449,6 +497,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+		gap: clamp(0.75rem, 3dvh, 1.5rem);
 		overflow: hidden;
 	}
 
@@ -536,19 +585,30 @@
 		border-left: 4px solid var(--team-color);
 	}
 
-	.round-badge {
+	.round-meta {
 		margin: 0;
-		font-size: 0.6875rem;
-		font-weight: 700;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--games-faint);
-	}
-
-	.score-strip {
-		margin: 0;
+		flex-shrink: 0;
 		font-size: 0.6875rem;
 		font-weight: 600;
+		letter-spacing: 0.02em;
+		color: var(--games-faint);
+		text-align: center;
+	}
+
+	.handoff-head {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: clamp(0.35rem, 1.5dvh, 0.6rem);
+	}
+
+	.turn-hero {
+		margin: 0;
+		flex-shrink: 0;
+		font-size: clamp(1.5rem, 6dvh, 2.25rem);
+		font-weight: 800;
+		letter-spacing: -0.03em;
+		line-height: 1.05;
 		text-align: center;
 	}
 
@@ -566,11 +626,14 @@
 		line-height: 1.1;
 	}
 
-	.gameover-title {
+	.gameover-kicker {
 		margin: 0;
-		font-size: clamp(1.25rem, 5dvh, 1.5rem);
-		font-weight: 700;
-		color: var(--games-ink);
+		flex-shrink: 0;
+		font-size: 0.5625rem;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--games-faint);
 		text-align: center;
 	}
 
@@ -609,9 +672,13 @@
 
 	.gameover-result {
 		margin: 0;
+		flex-shrink: 0;
 		text-align: center;
-		font-size: 1.0625rem;
-		font-weight: 700;
+		font-size: clamp(1.5rem, 6dvh, 2.25rem);
+		font-weight: 800;
+		letter-spacing: -0.03em;
+		line-height: 1.1;
+		color: var(--games-ink);
 	}
 
 	.btn-marmalade {
@@ -681,27 +748,99 @@
 		line-height: 1.35;
 	}
 
-	.psychic-value {
+	.psychic-readout {
 		margin: 0;
 		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.1rem;
+		text-align: center;
+		color: var(--team-accent, var(--games-accent));
+	}
+
+	.psychic-pole {
+		/* Fixed two-line height so the row never jumps when the word wraps */
+		height: 2.4em;
+		line-height: 1.15;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: clamp(1rem, 4dvh, 1.5rem);
+		font-weight: 700;
+		letter-spacing: -0.02em;
+	}
+
+	.psychic-pole-text {
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		line-clamp: 2;
+		overflow: hidden;
+	}
+
+	.psychic-arrow {
+		font-size: clamp(1.5rem, 6dvh, 2.25rem);
+		font-weight: 700;
+		line-height: 1;
+	}
+
+	.psychic-magnitude {
 		font-size: clamp(2.75rem, 14dvh, 4.5rem);
 		font-weight: 700;
 		font-variant-numeric: tabular-nums;
 		letter-spacing: -0.04em;
 		line-height: 1;
-		color: var(--team-accent, var(--games-accent));
-		text-align: center;
 	}
 
-	.reveal-nums {
+	.psychic-action {
 		margin: 0;
 		flex-shrink: 0;
-		font-size: 0.8125rem;
-		color: var(--games-muted);
 		text-align: center;
+		font-size: clamp(0.875rem, 2.5dvh, 1rem);
+		font-weight: 600;
+		color: var(--games-ink);
 	}
 
-	.reveal-nums strong {
+	.reveal-result {
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: clamp(0.2rem, 1dvh, 0.4rem);
+		width: 100%;
+	}
+
+	.reveal-compare {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		width: min(100%, 18rem);
+		margin-top: clamp(0.15rem, 1dvh, 0.4rem);
+	}
+
+	.compare-row {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 0.75rem;
+		padding: 0.3rem 0.55rem;
+		background: var(--games-surface-card);
+		border: 1px solid var(--games-border);
+		border-radius: 2px;
+	}
+
+	.compare-label {
+		font-size: 0.625rem;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--games-faint);
+	}
+
+	.compare-value {
+		font-size: 0.9375rem;
+		font-weight: 700;
 		color: var(--games-ink);
 		font-variant-numeric: tabular-nums;
 	}

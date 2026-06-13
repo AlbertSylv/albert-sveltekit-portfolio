@@ -18,6 +18,18 @@ export function formatScaleValue(v: number): string {
 	return '0';
 }
 
+/** Distance from the neutral center (0..100), regardless of side */
+export function magnitudeOf(v: number): number {
+	return Math.abs(v);
+}
+
+/** Which pole the value points to */
+export function sideOf(v: number): 'left' | 'right' | 'center' {
+	if (v > 0) return 'right';
+	if (v < 0) return 'left';
+	return 'center';
+}
+
 export function randomTarget(): number {
 	return Math.floor(Math.random() * (SCALE_MAX - SCALE_MIN + 1)) + SCALE_MIN;
 }

@@ -72,7 +72,7 @@ export const INSYNC_CARDS: InSyncCard[] = [
 		id: 'practical-ridiculous',
 		category: 'general',
 		left: { en: "Practical", da: "Praktisk" },
-		right: { en: "Ridiculous", da: "Ridiculous" }
+		right: { en: "Ridiculous", da: "Latterlig" }
 	},
 	{
 		id: 'predictable-surprising',
@@ -168,7 +168,7 @@ export const INSYNC_CARDS: InSyncCard[] = [
 		id: 'acceptable-lie-unforgivable-lie',
 		category: 'social',
 		left: { en: "Acceptable lie", da: "Acceptabel løgn" },
-		right: { en: "Unforgivable lie", da: "Uforgivelig løgn" }
+		right: { en: "Unforgivable lie", da: "Utilgivelig løgn" }
 	},
 	{
 		id: 'friendly-flirty',
@@ -269,14 +269,14 @@ export const INSYNC_CARDS: InSyncCard[] = [
 	{
 		id: 'mess-free-extremely-messy',
 		category: 'food',
-		left: { en: "Mess-free", da: "Rent på fingrene" },
+		left: { en: "Mess-free", da: "Intet svineri" },
 		right: { en: "Extremely messy", da: "Ekstremt svineri" }
 	},
 	{
 		id: 'worth-mess-not-worth-mess',
 		category: 'food',
-		left: { en: "Worth the mess", da: "Messen er det værd" },
-		right: { en: "Not worth the mess", da: "Messen er ikke det værd" }
+		left: { en: "Worth the mess", da: "Svineriet værd" },
+		right: { en: "Not worth the mess", da: "Ikke svineriet værd" }
 	},
 	{
 		id: 'bland-intense',
@@ -288,13 +288,13 @@ export const INSYNC_CARDS: InSyncCard[] = [
 		id: 'dry-saucy',
 		category: 'food',
 		left: { en: "Dry", da: "Tør" },
-		right: { en: "Saucy", da: "Sovsfuld" }
+		right: { en: "Saucy", da: "Masser af sovs" }
 	},
 	{
 		id: 'light-meal-food-coma',
 		category: 'food',
 		left: { en: "Light meal", da: "Let måltid" },
-		right: { en: "Food coma", da: "Madmætte" }
+		right: { en: "Food coma", da: "Madkoma" }
 	},
 	{
 		id: 'cheap-order-fancy-order',
@@ -354,7 +354,7 @@ export const INSYNC_CARDS: InSyncCard[] = [
 		id: 'mild-painfully-spicy',
 		category: 'food',
 		left: { en: "Mild", da: "Mild" },
-		right: { en: "Painfully spicy", da: "Smertefuld stærk" }
+		right: { en: "Painfully spicy", da: "Smertefuldt stærk" }
 	},
 	{
 		id: 'needs-topping-perfect-as-is',
@@ -425,8 +425,8 @@ export const INSYNC_CARDS: InSyncCard[] = [
 	{
 		id: 'low-budget-blockbuster',
 		category: 'pop',
-		left: { en: "Low-budget energy", da: "Lavt budget-holdning" },
-		right: { en: "Blockbuster energy", da: "Blockbuster-holdning" }
+		left: { en: "Low-budget energy", da: "Lavbudget-energi" },
+		right: { en: "Blockbuster energy", da: "Blockbuster-energi" }
 	},
 	{
 		id: 'bad-karaoke-great-karaoke',
@@ -491,8 +491,8 @@ export const INSYNC_CARDS: InSyncCard[] = [
 	{
 		id: 'fake-job-real-job',
 		category: 'life',
-		left: { en: "Fake-sounding job", da: "Lyder som løgn-job" },
-		right: { en: "Real-sounding job", da: "Lyder som rigtigt job" }
+		left: { en: "Fake-sounding job", da: "Lyder opdigtet" },
+		right: { en: "Real-sounding job", da: "Lyder ægte" }
 	},
 	{
 		id: 'useless-skill-essential-skill',
@@ -557,8 +557,8 @@ export const INSYNC_CARDS: InSyncCard[] = [
 	{
 		id: 'low-pressure-high-pressure-decision',
 		category: 'life',
-		left: { en: "Low-pressure decision", da: "Lavt pres-beslutning" },
-		right: { en: "High-pressure decision", da: "Højt pres-beslutning" }
+		left: { en: "Low-pressure decision", da: "Beslutning uden pres" },
+		right: { en: "High-pressure decision", da: "Beslutning under pres" }
 	},
 	{
 		id: 'good-use-money-cry-for-help',
@@ -659,8 +659,8 @@ export const INSYNC_CARDS: InSyncCard[] = [
 	{
 		id: 'good-nap-terrible-nap',
 		category: 'places',
-		left: { en: "Good place to nap", da: "Godt sted at nap" },
-		right: { en: "Terrible place to nap", da: "Forfærdeligt sted at nap" }
+		left: { en: "Good place to nap", da: "Godt sted at tage en lur" },
+		right: { en: "Terrible place to nap", da: "Forfærdeligt sted at tage en lur" }
 	},
 	{
 		id: 'public-behavior-private-behavior',
@@ -731,8 +731,8 @@ export const INSYNC_CARDS: InSyncCard[] = [
 	{
 		id: 'goblin-royalty',
 		category: 'weird',
-		left: { en: "Goblin energy", da: "Nisse-energi" },
-		right: { en: "Royalty energy", da: "Konge-energi" }
+		left: { en: "Goblin energy", da: "Goblin-energi" },
+		right: { en: "Royalty energy", da: "Kongelig energi" }
 	},
 	{
 		id: 'human-robot',
@@ -761,14 +761,14 @@ export const INSYNC_CARDS: InSyncCard[] = [
 	{
 		id: 'tiny-animal-large-animal',
 		category: 'weird',
-		left: { en: "Tiny animal energy", da: "Lille dyr-energi" },
-		right: { en: "Large animal energy", da: "Stort dyr-energi" }
+		left: { en: "Tiny animal energy", da: "Smådyr-energi" },
+		right: { en: "Large animal energy", da: "Stordyr-energi" }
 	},
 	{
 		id: 'scared-of-goose-goose-scared',
 		category: 'weird',
-		left: { en: "Would be scared of a goose", da: "Bliver bange for en gås" },
-		right: { en: "A goose would be scared of them", da: "En gås blev bange for dem" }
+		left: { en: "Would be scared of a goose", da: "Ville være bange for en gås" },
+		right: { en: "A goose would be scared of them", da: "En gås ville være bange for dem" }
 	},
 	{
 		id: 'looks-edible-not-edible',
@@ -882,7 +882,7 @@ export const INSYNC_CARDS: InSyncCard[] = [
 		id: 'classy-trashy',
 		category: 'debate',
 		left: { en: "Classy", da: "Stilfuld" },
-		right: { en: "Trashy", da: "Trashy" }
+		right: { en: "Trashy", da: "Tarvelig" }
 	},
 	{
 		id: 'basic-sophisticated',
@@ -924,7 +924,7 @@ export const INSYNC_CARDS: InSyncCard[] = [
 		id: 'real-holiday-fake-holiday',
 		category: 'debate',
 		left: { en: "Real holiday", da: "Rigtig helligdag" },
-		right: { en: "Fake holiday", da: "Fake helligdag" }
+		right: { en: "Fake holiday", da: "Opdigtet helligdag" }
 	},
 	{
 		id: 'good-tradition-bad-tradition',
@@ -947,8 +947,8 @@ export const INSYNC_CARDS: InSyncCard[] = [
 	{
 		id: 'harmless-prank-cruel-prank',
 		category: 'debate',
-		left: { en: "Harmless prank", da: "Harmløs practical joke" },
-		right: { en: "Cruel prank", da: "Grusom practical joke" }
+		left: { en: "Harmless prank", da: "Uskyldig spøg" },
+		right: { en: "Cruel prank", da: "Grusom spøg" }
 	},
 	{
 		id: 'good-advice-terrible-advice',

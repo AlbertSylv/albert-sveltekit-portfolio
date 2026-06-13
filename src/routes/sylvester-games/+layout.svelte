@@ -78,7 +78,9 @@
 	}
 	.games-shell-immersive {
 		min-height: 100dvh;
+		min-height: 100svh;
 		height: 100dvh;
+		height: 100svh;
 		overflow: hidden;
 	}
 </style>

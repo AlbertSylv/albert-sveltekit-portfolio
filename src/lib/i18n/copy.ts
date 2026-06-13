@@ -118,7 +118,9 @@ export type Copy = {
 			handoffHint: string;
 			handoffPsychicButton: string;
 			psychicOnly: string;
+			psychicAction: string;
 			psychicDone: string;
+			centerLabel: string;
 			guessKicker: string;
 			revealButton: string;
 			revealKicker: string;
@@ -377,11 +379,13 @@ export const copy: Record<Locale, Copy> = {
 				back: '← Games',
 				roundLabel: 'Round {current}/{total}',
 				turnKicker: "{team}'s turn",
-				handoffPass: 'Hand the phone to the Psychic on {team}',
-				handoffHint: 'Everyone can read the card. Only the Psychic taps below.',
-				handoffPsychicButton: "I'm the Psychic",
-				psychicOnly: 'Only you — memorize the number',
+				handoffPass: 'Hand the phone to Timberlake on {team}',
+				handoffHint: 'Everyone can read the card. Only Timberlake taps below.',
+				handoffPsychicButton: "I'm Timberlake",
+				psychicOnly: 'Only you, Timberlake — memorize the target',
+				psychicAction: 'Say a clue, then tap Done',
 				psychicDone: 'Done',
+				centerLabel: 'Dead center',
 				guessKicker: '{team} — move the slider',
 				revealButton: 'Reveal',
 				revealKicker: 'Reveal',
@@ -643,11 +647,13 @@ export const copy: Record<Locale, Copy> = {
 				back: '← Spilforside',
 				roundLabel: 'Runde {current}/{total}',
 				turnKicker: '{team}s tur',
-				handoffPass: 'Giv telefonen til Psychic på {team}',
-				handoffHint: 'Alle må læse kortet. Kun Psychic trykker nedenfor.',
-				handoffPsychicButton: 'Jeg er Psychic',
-				psychicOnly: 'Kun dig — husk tallet',
+				handoffPass: 'Giv telefonen til Timberlake på {team}',
+				handoffHint: 'Alle må læse kortet. Kun Timberlake trykker nedenfor.',
+				handoffPsychicButton: 'Jeg er Timberlake',
+				psychicOnly: 'Kun dig, Timberlake — husk målet',
+				psychicAction: 'Sig et hint, og tryk Færdig',
 				psychicDone: 'Færdig',
+				centerLabel: 'Lige i midten',
 				guessKicker: '{team} — flyt slideren',
 				revealButton: 'Afslør',
 				revealKicker: 'Afslør',

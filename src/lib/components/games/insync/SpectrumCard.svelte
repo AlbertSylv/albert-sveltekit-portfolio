@@ -13,9 +13,9 @@
 <div class="spectrum-card">
 	<p class="category">{categoryLabel}</p>
 	<div class="ends">
-		<span class="end end-left">{leftLabel}</span>
+		<span class="end">{leftLabel}</span>
 		<span class="sep" aria-hidden="true">↔</span>
-		<span class="end end-right">{rightLabel}</span>
+		<span class="end">{rightLabel}</span>
 	</div>
 </div>
 
@@ -38,7 +38,7 @@
 		display: grid;
 		grid-template-columns: 1fr auto 1fr;
 		align-items: center;
-		gap: 0.35rem 0.5rem;
+		gap: 0.35rem 0.6rem;
 		width: 100%;
 	}
 	.end {
@@ -46,6 +46,8 @@
 		font-weight: 700;
 		letter-spacing: -0.02em;
 		line-height: 1.2;
+		text-align: center;
+		text-wrap: balance;
 		color: var(--games-accent);
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
@@ -53,15 +55,10 @@
 		line-clamp: 3;
 		overflow: hidden;
 	}
-	.end-left {
-		text-align: left;
-	}
-	.end-right {
-		text-align: right;
-	}
 	.sep {
-		font-size: 0.875rem;
-		color: var(--games-faint);
+		font-size: clamp(1.5rem, 5dvh, 2.25rem);
+		font-weight: 700;
+		color: var(--games-ink);
 		line-height: 1;
 	}
 </style>
