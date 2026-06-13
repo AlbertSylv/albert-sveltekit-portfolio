@@ -266,26 +266,30 @@
 			</section>
 
 		{:else if round.phase === 'handoff' && labels}
-			<section class="panel">
-				<div class="panel-main">
-					<div class="handoff-head">
+			<section class="panel panel-play">
+				<div class="panel-body">
+					<div class="panel-head">
 						<p class="turn-hero" style="color: {accent}">{tr.turnKicker.replace('{team}', teamName)}</p>
 						<p class="handoff-msg">{tr.handoffPass.replace('{team}', teamName)}</p>
 					</div>
-					<SpectrumCard
-						leftLabel={labels.left}
-						rightLabel={labels.right}
-						categoryLabel={labels.category}
-					/>
+					<div class="panel-main">
+						<SpectrumCard
+							leftLabel={labels.left}
+							rightLabel={labels.right}
+							categoryLabel={labels.category}
+						/>
+					</div>
+					<div class="panel-tail">
+						<p class="hint">{tr.handoffHint}</p>
+						<p class="round-meta">
+							<span>{roundLabel}</span>
+							<span class="score-sep">·</span>
+							<span style="color: {TEAM_A_COLOR}">{round.teamA} {round.scoreA}</span>
+							<span class="score-sep">·</span>
+							<span style="color: {TEAM_B_COLOR}">{round.teamB} {round.scoreB}</span>
+						</p>
+					</div>
 				</div>
-				<p class="hint">{tr.handoffHint}</p>
-				<p class="round-meta">
-					<span>{roundLabel}</span>
-					<span class="score-sep">·</span>
-					<span style="color: {TEAM_A_COLOR}">{round.teamA} {round.scoreA}</span>
-					<span class="score-sep">·</span>
-					<span style="color: {TEAM_B_COLOR}">{round.teamB} {round.scoreB}</span>
-				</p>
 				<div class="panel-footer">
 					<button type="button" class="btn-primary" onclick={enterPsychic}
 						>{tr.handoffPsychicButton}</button
@@ -294,30 +298,36 @@
 			</section>
 
 		{:else if round.phase === 'psychic' && labels && round.target != null && psychicReady}
-			<section class="panel panel-psychic">
-				<p class="phase-kicker">{tr.psychicOnly}</p>
-				<div class="panel-main">
-					<div class="psychic-readout" style="color: {accent}" aria-live="polite">
-						{#if psychicSide === 'center'}
-							<div class="psychic-pole"><span class="psychic-pole-text">{tr.centerLabel}</span></div>
-						{:else}
-							<div class="psychic-pole"><span class="psychic-pole-text">{psychicPoleWord}</span></div>
-							<div class="psychic-arrow">{psychicSide === 'left' ? '←' : '→'}</div>
-							<div class="psychic-magnitude">{psychicMagnitude}</div>
-						{/if}
+			<section class="panel panel-play panel-psychic">
+				<div class="panel-body">
+					<div class="panel-head">
+						<p class="phase-kicker">{tr.psychicOnly}</p>
+						<div class="psychic-readout" style="color: {accent}" aria-live="polite">
+							{#if psychicSide === 'center'}
+								<div class="psychic-pole"><span class="psychic-pole-text">{tr.centerLabel}</span></div>
+							{:else}
+								<div class="psychic-pole"><span class="psychic-pole-text">{psychicPoleWord}</span></div>
+								<div class="psychic-arrow">{psychicSide === 'left' ? '←' : '→'}</div>
+								<div class="psychic-magnitude">{psychicMagnitude}</div>
+							{/if}
+						</div>
 					</div>
-					<InSyncSlider
-						leftLabel={labels.left}
-						rightLabel={labels.right}
-						mode="psychic"
-						target={round.target}
-						value={round.target}
-						disabled={true}
-						zoneLegend={tr.zoneLegend}
-						centerLabel={tr.centerLabel}
-					/>
+					<div class="panel-main">
+						<InSyncSlider
+							leftLabel={labels.left}
+							rightLabel={labels.right}
+							mode="psychic"
+							target={round.target}
+							value={round.target}
+							disabled={true}
+							zoneLegend={tr.zoneLegend}
+							centerLabel={tr.centerLabel}
+						/>
+					</div>
+					<div class="panel-tail">
+						<p class="psychic-action">{tr.psychicAction}</p>
+					</div>
 				</div>
-				<p class="psychic-action">{tr.psychicAction}</p>
 				<div class="panel-footer">
 					<button type="button" class="btn-primary" onclick={leavePsychic}
 						>{tr.psychicDone}</button
@@ -326,24 +336,28 @@
 			</section>
 
 		{:else if round.phase === 'guess' && labels}
-			<section class="panel">
-				<p class="phase-kicker" style="color: {accent}">{tr.guessKicker.replace('{team}', teamName)}</p>
-				<div class="panel-main">
-					<SpectrumCard
-						leftLabel={labels.left}
-						rightLabel={labels.right}
-						categoryLabel={labels.category}
-					/>
-					<InSyncSlider
-						leftLabel={labels.left}
-						rightLabel={labels.right}
-						mode="guess"
-						value={round.guess}
-						accentColor={accent}
-						centerLabel={tr.centerLabel}
-						showLabels={false}
-						onInput={(v) => (round = { ...round, guess: v })}
-					/>
+			<section class="panel panel-play">
+				<div class="panel-body">
+					<div class="panel-head">
+						<p class="phase-kicker" style="color: {accent}">{tr.guessKicker.replace('{team}', teamName)}</p>
+						<SpectrumCard
+							leftLabel={labels.left}
+							rightLabel={labels.right}
+							categoryLabel={labels.category}
+						/>
+					</div>
+					<div class="panel-main">
+						<InSyncSlider
+							leftLabel={labels.left}
+							rightLabel={labels.right}
+							mode="guess"
+							value={round.guess}
+							accentColor={accent}
+							centerLabel={tr.centerLabel}
+							showLabels={false}
+							onInput={(v) => (round = { ...round, guess: v })}
+						/>
+					</div>
 				</div>
 				<div class="panel-footer">
 					<button type="button" class="btn-primary" onclick={lockReveal}>{tr.revealButton}</button>
@@ -351,35 +365,41 @@
 			</section>
 
 		{:else if round.phase === 'reveal' && labels && revealTargetValue != null}
-			<section class="panel">
-				<p class="phase-kicker">{tr.revealKicker}</p>
-				<div class="panel-main">
-					<InSyncSlider
-						leftLabel={labels.left}
-						rightLabel={labels.right}
-						mode="reveal"
-						target={revealTargetValue}
-						value={round.guess}
-						disabled={true}
-						accentColor={accent}
-						zoneLegend={tr.zoneLegend}
-						centerLabel={tr.centerLabel}
-					/>
-					<div class="reveal-result">
-						{#if verdictKey}
-							<p class="points-earned" style="color: {accent}">
-								{tr.pointsEarned.replace('{n}', String(pointsThisRound))}
-							</p>
-							<p class="verdict">{tr.verdict[verdictKey]}</p>
-						{/if}
-						<div class="reveal-compare">
-							<div class="compare-row">
-								<span class="compare-label">{tr.revealTargetLabel}</span>
-								<span class="compare-value">{revealTargetText}</span>
-							</div>
-							<div class="compare-row">
-								<span class="compare-label">{tr.revealGuessLabel}</span>
-								<span class="compare-value">{revealGuessText}</span>
+			<section class="panel panel-play">
+				<div class="panel-body">
+					<div class="panel-head">
+						<p class="phase-kicker">{tr.revealKicker}</p>
+					</div>
+					<div class="panel-main">
+						<InSyncSlider
+							leftLabel={labels.left}
+							rightLabel={labels.right}
+							mode="reveal"
+							target={revealTargetValue}
+							value={round.guess}
+							disabled={true}
+							accentColor={accent}
+							zoneLegend={tr.zoneLegend}
+							centerLabel={tr.centerLabel}
+						/>
+					</div>
+					<div class="panel-tail">
+						<div class="reveal-result">
+							{#if verdictKey}
+								<p class="points-earned" style="color: {accent}">
+									{tr.pointsEarned.replace('{n}', String(pointsThisRound))}
+								</p>
+								<p class="verdict">{tr.verdict[verdictKey]}</p>
+							{/if}
+							<div class="reveal-compare">
+								<div class="compare-row">
+									<span class="compare-label">{tr.revealTargetLabel}</span>
+									<span class="compare-value">{revealTargetText}</span>
+								</div>
+								<div class="compare-row">
+									<span class="compare-label">{tr.revealGuessLabel}</span>
+									<span class="compare-value">{revealGuessText}</span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -489,7 +509,8 @@
 		align-items: stretch;
 	}
 
-	.panel-main {
+	/* Gameplay phases: body centers the head/main/tail cluster, footer pinned below */
+	.panel-body {
 		flex: 1;
 		min-height: 0;
 		width: 100%;
@@ -497,7 +518,29 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		gap: clamp(0.75rem, 3dvh, 1.5rem);
+		gap: clamp(0.6rem, 3dvh, 1.4rem);
+		overflow: hidden;
+	}
+
+	.panel-head,
+	.panel-tail {
+		flex-shrink: 0;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: clamp(0.3rem, 1.4dvh, 0.6rem);
+	}
+
+	.panel-main {
+		flex-shrink: 1;
+		min-height: 0;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: clamp(0.5rem, 2dvh, 1rem);
 		overflow: hidden;
 	}
 
@@ -593,13 +636,6 @@
 		letter-spacing: 0.02em;
 		color: var(--games-faint);
 		text-align: center;
-	}
-
-	.handoff-head {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: clamp(0.35rem, 1.5dvh, 0.6rem);
 	}
 
 	.turn-hero {
@@ -885,5 +921,102 @@
 		background: var(--games-accent-btn-hover);
 		border-color: var(--games-accent-btn-hover);
 		filter: none;
+	}
+
+	/* ---- Short landscape (phones held sideways): two-column layout ---- */
+	@media (orientation: landscape) and (max-height: 600px) {
+		.viewport {
+			max-width: min(58rem, 100%);
+			padding-top: max(0.5rem, env(safe-area-inset-top));
+			padding-bottom: max(1.25rem, calc(env(safe-area-inset-bottom) + 0.75rem));
+			padding-left: max(2.5rem, env(safe-area-inset-left));
+			padding-right: max(1rem, env(safe-area-inset-right));
+		}
+
+		/* Gameplay phases: slider/visual on the left, text + button on the right */
+		.panel-play {
+			display: grid;
+			grid-template-columns: 1.1fr 0.9fr;
+			grid-template-rows: auto auto auto;
+			grid-template-areas:
+				'main head'
+				'main tail'
+				'main footer';
+			align-content: center;
+			column-gap: clamp(1rem, 4vw, 2.5rem);
+			row-gap: clamp(0.2rem, 2vh, 0.5rem);
+			gap: clamp(0.2rem, 2vh, 0.5rem) clamp(1rem, 4vw, 2.5rem);
+		}
+
+		.panel-play .panel-body {
+			display: contents;
+		}
+
+		.panel-play .panel-head {
+			grid-area: head;
+			align-self: end;
+		}
+
+		.panel-play .panel-main {
+			grid-area: main;
+			align-self: center;
+		}
+
+		.panel-play .panel-tail {
+			grid-area: tail;
+			align-self: start;
+		}
+
+		.panel-play .panel-footer {
+			grid-area: footer;
+			align-self: end;
+			margin-top: 0;
+		}
+
+		/* Keep the lane tall enough to fully contain the downward guess pin
+		   (its head hangs below the track), so it never slips behind the URL bar */
+		.panel-play :global(.track-wrap) {
+			height: clamp(7rem, 40vh, 8.5rem);
+		}
+
+		/* Tame the oversized hero numerals when vertical space is scarce */
+		.psychic-magnitude {
+			font-size: clamp(2rem, 16vh, 3rem);
+		}
+
+		.psychic-pole {
+			height: 2.2em;
+			font-size: clamp(0.9rem, 7vh, 1.25rem);
+		}
+
+		.psychic-arrow {
+			font-size: clamp(1.25rem, 9vh, 1.85rem);
+		}
+
+		.turn-hero {
+			font-size: clamp(1.35rem, 11vh, 2rem);
+		}
+
+		.points-earned {
+			font-size: clamp(1.5rem, 13vh, 2.25rem);
+		}
+
+		/* Teams + game-over: lay the cards out side by side */
+		.panel-teams .team-cards,
+		.panel-gameover .final-scores {
+			flex-direction: row;
+			flex: 0 0 auto;
+			margin-top: 0;
+		}
+
+		.panel-teams .team-card,
+		.panel-gameover .final-row {
+			flex: 1;
+		}
+
+		.panel-teams {
+			justify-content: center;
+			gap: clamp(0.35rem, 2vh, 0.7rem);
+		}
 	}
 </style>
