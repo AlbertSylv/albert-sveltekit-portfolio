@@ -1,5 +1,6 @@
 import type { Locale } from './locales';
 import { isExperienceSlug } from './experience';
+import { BOB_VIDEO_ID } from '$lib/site';
 
 export type WorkCardFigure = {
 	src: string;
@@ -41,7 +42,18 @@ export type WorkCard = {
 	/** Heading shown above the `figures` gallery; falls back to `experience.figuresHeading`. */
 	figuresHeading?: string;
 	figures?: WorkCardFigure[];
+	/** Heading shown above `clients`; falls back to `experience.clients`. */
+	clientsHeading?: string;
 	clients?: WorkCardClient[];
+};
+
+export type Project = {
+	slug: string;
+	title: string;
+	context: string;
+	body: string[];
+	/** Hidden in production while empty. */
+	youtubeId: string;
 };
 
 export type Copy = {
@@ -64,6 +76,13 @@ export type Copy = {
 	work: {
 		title: string;
 		cards: WorkCard[];
+	};
+	projects: {
+		title: string;
+		play: string;
+		watchOnYoutube: string;
+		comingSoon: string;
+		items: Project[];
 	};
 	experience: {
 		back: string;
@@ -145,7 +164,7 @@ export const copy: Record<Locale, Copy> = {
 		meta: {
 			title: 'Albert Sylvester · Front-end developer · Copenhagen',
 			description:
-				'Front-end developer in Copenhagen. I build software in production with TypeScript and React, talk to users, and help teams figure out what to build next. Most recently at BMF Systems.'
+				'Front-end developer in Copenhagen. I build software in production with TypeScript and React, talk to users, and help teams figure out what to build next. Currently freelancing, mainly on MJS.'
 		},
 		nav: { home: 'Home', work: 'Experience', workMenu: 'Open experience pages', contact: 'Contact' },
 		lang: { label: 'Language', da: 'Dansk', en: 'English' },
@@ -180,6 +199,37 @@ export const copy: Record<Locale, Copy> = {
 			title: "What I've worked on",
 			cards: [
 				{
+					slug: 'freelance',
+					menuLabel: 'Freelance',
+					title: 'Sylvester Works',
+					context: 'Freelance developer & support · 2026-present',
+					note: 'Freelance support and development on MJS, one of the two products that came out of {{linkText}}. Plus WordPress fixes for Signum Life Science.',
+					noteLink: { text: 'BMF Systems', slug: 'bmf-systems' },
+					detail: [
+						{
+							heading: 'What I do',
+							body: 'Sylvester Works is my one-person company for freelance work. Most of my time goes to MJS (Merrild Jensen Systems). When BMF Systems was split into two products with separate owners, MJS kept me on to support customers and develop the product the same way I did on BMF. Alongside that I help Signum Life Science with issues in their custom WordPress theme.'
+						}
+					],
+					thumbSrc: 'images/home/work-sylvester-works.svg',
+					thumbAlt: 'Sylvester Works wordmark.',
+					clientsHeading: 'Clients',
+					clients: [
+						{
+							name: 'Merrild Jensen Systems (MJS)',
+							logoSrc: 'images/experience/client-mjs.svg',
+							logoAlt: 'Merrild Jensen logo.',
+							note: 'Customer support and product development on the SharePoint-based ISO management system, continuing my work from BMF.'
+						},
+						{
+							name: 'Signum Life Science',
+							logoSrc: 'images/experience/client-signum.png',
+							logoAlt: 'Signum Life Science logo.',
+							note: 'Fixes and maintenance on their custom WordPress theme.'
+						}
+					]
+				},
+				{
 					slug: 'bmf-systems',
 					menuLabel: 'BMF Systems',
 					title: 'BMF Systems',
@@ -197,6 +247,10 @@ export const copy: Record<Locale, Copy> = {
 						{
 							heading: 'My role',
 							body: 'I worked as product developer and support. Customers brought problems and ideas for improvement; I fixed what I could on the spot and brought recurring themes into product meetings. Together with stakeholders I agreed what to prioritise for the next release, then implemented it. For the last two years I was the only developer on BMF and owned the features that shipped.'
+						},
+						{
+							heading: 'After the split',
+							body: 'BMF Systems has since been split into two products with separate owners. I continue on one of them, MJS, as a freelancer.'
 						}
 					],
 					figuresHeading: 'Product screens',
@@ -230,12 +284,12 @@ export const copy: Record<Locale, Copy> = {
 					slug: 'cph-cloud',
 					menuLabel: 'CPH Cloud',
 					title: 'CPH Cloud Company',
-					context: 'Concept & front-end developer · agency · 2023-present',
+					context: 'Concept & front-end developer · agency · 2023-2026',
 					note: 'Custom React web parts and SharePoint consulting for larger clients like Novo Nordisk, AO Johansen and Xellia.',
 					detail: [
 						{
-							heading: 'What the role looks like',
-							body: 'Most days are concept and code development for custom React web parts inside SharePoint. The rest is broader Microsoft 365 and Azure work for smaller clients: tenant administration, permissions, and the practical things outside the codebase that need a developer on them.'
+							heading: 'What the role looked like',
+							body: 'Most days were concept and code development for custom React web parts inside SharePoint. The rest was broader Microsoft 365 and Azure work for smaller clients: tenant administration, permissions, and the practical things outside the codebase that need a developer on them.'
 						},
 						{
 							heading: 'What is a SharePoint web part?',
@@ -322,6 +376,24 @@ export const copy: Record<Locale, Copy> = {
 					],
 					thumbSrc: 'images/home/work-fauna.png',
 					thumbAlt: 'FaunaPhotonics logo.'
+				}
+			]
+		},
+		projects: {
+			title: 'Latest side project',
+			play: 'Play video',
+			watchOnYoutube: 'Watch on YouTube',
+			comingSoon: 'Video coming soon',
+			items: [
+				{
+					slug: 'bob',
+					title: 'Making my plant speak',
+					context: 'Hardware & software side project · video, 17 min',
+					body: [
+						"Bob is my houseplant. I turned him into a cyborg so he can talk to me and tell me how he's doing.",
+						'The video follows the whole project, from the first idea to Bob speaking for himself.'
+					],
+					youtubeId: BOB_VIDEO_ID
 				}
 			]
 		},
@@ -413,7 +485,7 @@ export const copy: Record<Locale, Copy> = {
 		meta: {
 			title: 'Albert Sylvester · Front-end-udvikler · København',
 			description:
-				'Front-end-udvikler i København. Jeg bygger software i produktion med TypeScript og React, taler med brugerne, og hjælper teamet med at finde ud af hvad vi skal bygge som det næste. Senest BMF Systems.'
+				'Front-end-udvikler i København. Jeg bygger software i produktion med TypeScript og React, taler med brugerne, og hjælper teamet med at finde ud af hvad vi skal bygge som det næste. Freelancer i dag, primært på MJS.'
 		},
 		nav: { home: 'Forside', work: 'Erfaring', workMenu: 'Åbn liste over udvalgte roller', contact: 'Kontakt' },
 		lang: { label: 'Sprog', da: 'Dansk', en: 'English' },
@@ -448,6 +520,37 @@ export const copy: Record<Locale, Copy> = {
 			title: 'Hvad jeg har arbejdet med',
 			cards: [
 				{
+					slug: 'freelance',
+					menuLabel: 'Freelance',
+					title: 'Sylvester Works',
+					context: 'Freelance-udvikler og support · 2026-nu',
+					note: 'Freelance support og udvikling på MJS, et af de to produkter der kom ud af {{linkText}}. Derudover WordPress-rettelser for Signum Life Science.',
+					noteLink: { text: 'BMF Systems', slug: 'bmf-systems' },
+					detail: [
+						{
+							heading: 'Hvad jeg laver',
+							body: 'Sylvester Works er mit enkeltmandsfirma til freelanceopgaver. Det meste af min tid går til MJS (Merrild Jensen Systems). Da BMF Systems blev delt i to produkter med hver sin ejer, beholdt MJS mig til at supportere kunder og udvikle produktet på samme måde som på BMF. Ved siden af hjælper jeg Signum Life Science med problemer i deres specialudviklede WordPress-tema.'
+						}
+					],
+					thumbSrc: 'images/home/work-sylvester-works.svg',
+					thumbAlt: 'Sylvester Works-ordmærke.',
+					clientsHeading: 'Kunder',
+					clients: [
+						{
+							name: 'Merrild Jensen Systems (MJS)',
+							logoSrc: 'images/experience/client-mjs.svg',
+							logoAlt: 'Merrild Jensen-logo.',
+							note: 'Kundesupport og produktudvikling på det SharePoint-baserede ISO-ledelsessystem, i forlængelse af mit arbejde på BMF.'
+						},
+						{
+							name: 'Signum Life Science',
+							logoSrc: 'images/experience/client-signum.png',
+							logoAlt: 'Signum Life Science-logo.',
+							note: 'Rettelser og vedligeholdelse af deres specialudviklede WordPress-tema.'
+						}
+					]
+				},
+				{
 					slug: 'bmf-systems',
 					menuLabel: 'BMF Systems',
 					title: 'BMF Systems',
@@ -465,6 +568,10 @@ export const copy: Record<Locale, Copy> = {
 						{
 							heading: 'Min rolle',
 							body: 'Jeg arbejdede som produktudvikler og support. Kunder kom med problemer og forslag til forbedringer. Jeg løste det jeg kunne med det samme og bragte gentagne temaer med til produktmøder. Med stakeholders aftalte jeg hvad der skulle prioriteres til næste release, og implementerede det bagefter. De sidste to år var jeg eneste udvikler på BMF og stod for det der blev udgivet.'
+						},
+						{
+							heading: 'Efter opdelingen',
+							body: 'BMF Systems er siden blevet delt i to produkter med hver sin ejer. Jeg fortsætter på det ene, MJS, som freelancer.'
 						}
 					],
 					figuresHeading: 'Produktbilleder',
@@ -498,12 +605,12 @@ export const copy: Record<Locale, Copy> = {
 					slug: 'cph-cloud',
 					menuLabel: 'CPH Cloud',
 					title: 'CPH Cloud Company',
-					context: 'Koncept- og front-end-udvikler · bureau · 2023-nu',
+					context: 'Koncept- og front-end-udvikler · bureau · 2023-2026',
 					note: 'Skræddersyede React-webparts og SharePoint-konsulentarbejde for større kunder som Novo Nordisk, AO Johansen og Xellia.',
 					detail: [
 						{
-							heading: 'Sådan ser rollen ud',
-							body: 'De fleste dage er koncept- og kodeudvikling af skræddersyede React-webparts i SharePoint. Resten er bredere Microsoft 365- og Azure-arbejde for mindre kunder: tenant-administration, rettigheder, og de praktiske ting uden for koden der har brug for en udvikler på sig.'
+							heading: 'Sådan så rollen ud',
+							body: 'De fleste dage var koncept- og kodeudvikling af skræddersyede React-webparts i SharePoint. Resten var bredere Microsoft 365- og Azure-arbejde for mindre kunder: tenant-administration, rettigheder, og de praktiske ting uden for koden der har brug for en udvikler på sig.'
 						},
 						{
 							heading: 'Hvad er en SharePoint-webpart?',
@@ -590,6 +697,24 @@ export const copy: Record<Locale, Copy> = {
 					],
 					thumbSrc: 'images/home/work-fauna.png',
 					thumbAlt: 'FaunaPhotonics-logo.'
+				}
+			]
+		},
+		projects: {
+			title: 'Seneste sideprojekt',
+			play: 'Afspil video',
+			watchOnYoutube: 'Se på YouTube',
+			comingSoon: 'Video på vej',
+			items: [
+				{
+					slug: 'bob',
+					title: 'Sådan fik jeg min plante til at tale',
+					context: 'Hardware- og softwareprojekt · video, 17 min',
+					body: [
+						'Bob er min stueplante. Jeg har gjort ham til en cyborg, så han kan tale til mig og fortælle, hvordan han har det.',
+						'Videoen følger hele projektet, fra den første idé til Bob selv kan sige noget.'
+					],
+					youtubeId: BOB_VIDEO_ID
 				}
 			]
 		},

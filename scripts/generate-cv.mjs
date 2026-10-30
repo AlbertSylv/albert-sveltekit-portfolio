@@ -68,15 +68,24 @@ doc
 	.fontSize(9.75)
 	.fillColor(INK)
 	.text(
-		'Front-end developer who works across user research, product and code. I build production software in TypeScript and React, talk to users regularly, and help teams decide what to build next. Most of my recent work is SharePoint / Microsoft 365 product development and custom React web parts for enterprise clients.',
+		'Front-end developer who works across user research, product and code. I build production software in TypeScript and React, talk to users regularly, and help teams decide what to build next. Currently freelancing, mainly on MJS. Most of my recent work is SharePoint / Microsoft 365 product development and custom React web parts for enterprise clients.',
 		{ width: CONTENT_W, lineGap: 2 }
 	);
 
 sectionTitle(doc, 'Experience');
 
 role(doc, {
+	title: 'Sylvester Works (freelance)',
+	meta: 'Freelance developer & support · 2026–present',
+	bullets: [
+		'Customer support and product development on MJS (Merrild Jensen Systems), one of the two products that came out of BMF Systems.',
+		'Fixes and maintenance on Signum Life Science’s custom WordPress theme.'
+	]
+});
+
+role(doc, {
 	title: 'CPH Cloud Company',
-	meta: 'Concept & front-end developer · 2023–present',
+	meta: 'Concept & front-end developer · 2023–2026',
 	bullets: [
 		'Custom React web parts and SharePoint consulting for clients including Novo Nordisk, AO Johansen and Xellia.',
 		'Built and maintained internal SharePoint web parts for Novo Nordisk Global Medical Affairs, including a therapy-area navigation matrix editable by non-developers.',

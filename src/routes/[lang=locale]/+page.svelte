@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { base } from '$app/paths';
+	import { dev } from '$app/environment';
 	import type { Locale } from '$lib/i18n/locales';
+	import YouTubeEmbed from '$lib/components/YouTubeEmbed.svelte';
 	import { t } from '$lib/i18n/copy';
 	import { localizedHref } from '$lib/i18n/paths';
 	import { SITE_ORIGIN } from '$lib/site';
@@ -16,6 +18,8 @@
 	const ogImg = $derived(`${SITE_ORIGIN}${base}/${tr.hero.portraitSrc}`);
 
 	const NOTE_LINK_PLACEHOLDER = '{{linkText}}';
+
+	const projects = $derived(tr.projects.items.filter((p) => dev || p.youtubeId));
 </script>
 
 <svelte:head>
@@ -83,7 +87,42 @@
 	</ol>
 </section>
 
-<section id="work" class="work animate-in stagger-2" aria-labelledby="work-h">
+<!-- Hidden until Bob's video is on YouTube.
+{#if projects.length}
+	<section id="projects" class="projects animate-in stagger-2" aria-labelledby="projects-h">
+		<h2 id="projects-h">{tr.projects.title}</h2>
+		{#each projects as project}
+			<article class="project" data-slug={project.slug}>
+				<div class="project-copy">
+					<h3>{project.title}</h3>
+					<p class="project-context">{project.context}</p>
+					{#each project.body as paragraph}
+						<p class="project-body">{paragraph}</p>
+					{/each}
+					{#if project.youtubeId}
+						<a
+							class="project-link"
+							href={`https://www.youtube.com/watch?v=${project.youtubeId}`}
+							target="_blank"
+							rel="noopener noreferrer">{tr.projects.watchOnYoutube} ↗</a
+						>
+					{/if}
+				</div>
+				<div class="project-media">
+					<YouTubeEmbed
+						id={project.youtubeId}
+						title={project.title}
+						playLabel={tr.projects.play}
+						comingSoon={tr.projects.comingSoon}
+					/>
+				</div>
+			</article>
+		{/each}
+	</section>
+{/if}
+-->
+
+<section id="work" class="work animate-in stagger-3" aria-labelledby="work-h">
 	<div class="work-head">
 		<h2 id="work-h">{tr.work.title}</h2>
 	</div>
@@ -335,9 +374,14 @@
 		grid-template-columns: 1fr;
 		align-items: stretch;
 	}
-	@media (min-width: 52rem) {
+	@media (min-width: 36rem) {
 		.card-grid {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+	@media (min-width: 64rem) {
+		.card-grid {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
 		}
 	}
 	.card {
@@ -399,6 +443,10 @@
 		object-fit: contain;
 	}
 	/* Optical balance: same padding, tuned scale per logo shape */
+	.card[data-slug='freelance'] .card-thumb {
+		max-width: 72%;
+		max-height: 72%;
+	}
 	.card[data-slug='bmf-systems'] .card-thumb {
 		max-width: 60%;
 		max-height: 60%;
@@ -443,6 +491,55 @@
 	.card-cta-arrow {
 		display: block;
 		transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+	.projects {
+		margin-bottom: clamp(2.75rem, 5vw, 4rem);
+	}
+	.projects h2 {
+		color: var(--ink);
+		margin-bottom: 1.25rem;
+	}
+	.project {
+		display: grid;
+		gap: 1.25rem;
+		padding: clamp(1rem, 2vw, 1.25rem);
+		background: var(--surface);
+		border: 1px solid var(--border);
+	}
+	@media (min-width: 48rem) {
+		.project {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+			gap: 2rem;
+			align-items: center;
+		}
+	}
+	.project h3 {
+		margin: 0 0 0.25rem;
+		font-size: 1.15rem;
+	}
+	.project-context {
+		margin: 0 0 0.75rem;
+		font-weight: 600;
+		font-size: 0.84rem;
+		color: var(--ink);
+	}
+	.project-body {
+		margin: 0 0 0.6rem;
+		font-size: 0.92rem;
+		line-height: 1.55;
+		color: color-mix(in srgb, var(--muted) 40%, var(--ink));
+	}
+	.project-link {
+		display: inline-block;
+		margin-top: 0.35rem;
+		font-size: 0.86rem;
+		font-weight: 600;
+		color: var(--ink);
+		text-decoration: none;
+		border-bottom: 1px solid var(--border-strong);
+	}
+	.project-link:hover {
+		border-bottom-color: var(--ink);
 	}
 	.contact-lead {
 		margin-bottom: 0.75rem;

@@ -100,7 +100,7 @@
 
 		{#if card.clients?.length}
 			<section class="xp-clients" aria-labelledby="xp-clients-h">
-				<h2 id="xp-clients-h" class="xp-gallery-heading">{tr.experience.clients}</h2>
+				<h2 id="xp-clients-h" class="xp-gallery-heading">{card.clientsHeading ?? tr.experience.clients}</h2>
 				<ul class="xp-clients-grid">
 					{#each card.clients as client}
 						<li class="xp-client">
