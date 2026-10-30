@@ -1,1 +1,0 @@
-var e=`https://www.albertsylvester.dk`;export{e as t};
