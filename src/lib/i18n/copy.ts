@@ -1,6 +1,6 @@
 import type { Locale } from './locales';
 import { isExperienceSlug } from './experience';
-import { BOB_VIDEO_ID } from '$lib/site';
+import { BOB_VIDEO_DRIVE_ID } from '$lib/site';
 
 export type WorkCardFigure = {
 	src: string;
@@ -52,8 +52,8 @@ export type Project = {
 	title: string;
 	context: string;
 	body: string[];
-	/** Hidden in production while empty. */
-	youtubeId: string;
+	/** Google Drive file ID. Hidden in production while empty. */
+	driveId: string;
 };
 
 export type Copy = {
@@ -79,8 +79,7 @@ export type Copy = {
 	};
 	projects: {
 		title: string;
-		play: string;
-		watchOnYoutube: string;
+		openVideo: string;
 		comingSoon: string;
 		items: Project[];
 	};
@@ -381,8 +380,7 @@ export const copy: Record<Locale, Copy> = {
 		},
 		projects: {
 			title: 'Latest side project',
-			play: 'Play video',
-			watchOnYoutube: 'Watch on YouTube',
+			openVideo: 'Open video in a new tab',
 			comingSoon: 'Video coming soon',
 			items: [
 				{
@@ -393,7 +391,7 @@ export const copy: Record<Locale, Copy> = {
 						"Bob is my houseplant. I turned him into a cyborg so he can talk to me and tell me how he's doing.",
 						'The video follows the whole project, from the first idea to Bob speaking for himself.'
 					],
-					youtubeId: BOB_VIDEO_ID
+					driveId: BOB_VIDEO_DRIVE_ID
 				}
 			]
 		},
@@ -702,8 +700,7 @@ export const copy: Record<Locale, Copy> = {
 		},
 		projects: {
 			title: 'Seneste sideprojekt',
-			play: 'Afspil video',
-			watchOnYoutube: 'Se på YouTube',
+			openVideo: 'Åbn videoen i en ny fane',
 			comingSoon: 'Video på vej',
 			items: [
 				{
@@ -714,7 +711,7 @@ export const copy: Record<Locale, Copy> = {
 						'Bob er min stueplante. Jeg har gjort ham til en cyborg, så han kan tale til mig og fortælle, hvordan han har det.',
 						'Videoen følger hele projektet, fra den første idé til Bob selv kan sige noget.'
 					],
-					youtubeId: BOB_VIDEO_ID
+					driveId: BOB_VIDEO_DRIVE_ID
 				}
 			]
 		},

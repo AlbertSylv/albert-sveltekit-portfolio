@@ -2,8 +2,7 @@
 export const SITE_ORIGIN = 'https://www.albertsylvester.dk';
 
 /**
- * YouTube video ID for "Making my plant speak", e.g. `dQw4w9WgXcQ` from
- * `https://www.youtube.com/watch?v=dQw4w9WgXcQ`. The side-project section only
- * shows in production once this is set.
+ * Google Drive file ID for "Making my plant speak", the part between `/d/` and
+ * `/view` in the share link. The file must be shared as "Anyone with the link".
  */
-export const BOB_VIDEO_ID = '';
+export const BOB_VIDEO_DRIVE_ID = '15uYT0XWgSdonrXO53pOfCFfUaUtftArR';
