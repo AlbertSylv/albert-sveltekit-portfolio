@@ -2,7 +2,7 @@
 	import { base } from '$app/paths';
 	import { dev } from '$app/environment';
 	import type { Locale } from '$lib/i18n/locales';
-	import VideoEmbed from '$lib/components/VideoEmbed.svelte';
+	import YouTubeEmbed from '$lib/components/YouTubeEmbed.svelte';
 	import { t } from '$lib/i18n/copy';
 	import { localizedHref } from '$lib/i18n/paths';
 	import { SITE_ORIGIN } from '$lib/site';
@@ -19,7 +19,7 @@
 
 	const NOTE_LINK_PLACEHOLDER = '{{linkText}}';
 
-	const projects = $derived(tr.projects.items.filter((p) => dev || p.driveId));
+	const projects = $derived(tr.projects.items.filter((p) => dev || p.youtubeId));
 </script>
 
 <svelte:head>
@@ -98,19 +98,20 @@
 					{#each project.body as paragraph}
 						<p class="project-body">{paragraph}</p>
 					{/each}
-					{#if project.driveId}
+					{#if project.youtubeId}
 						<a
 							class="project-link"
-							href={`https://drive.google.com/file/d/${project.driveId}/view`}
+							href={`https://www.youtube.com/watch?v=${project.youtubeId}`}
 							target="_blank"
-							rel="noopener noreferrer">{tr.projects.openVideo} ↗</a
+							rel="noopener noreferrer">{tr.projects.watchOnYoutube} ↗</a
 						>
 					{/if}
 				</div>
 				<div class="project-media">
-					<VideoEmbed
-						driveId={project.driveId}
+					<YouTubeEmbed
+						id={project.youtubeId}
 						title={project.title}
+						playLabel={tr.projects.play}
 						comingSoon={tr.projects.comingSoon}
 					/>
 				</div>
